@@ -8,10 +8,10 @@
 
     <div class="bg-white rounded-3xl p-4 sm:p-6 border border-slate-200/80 shadow-xs flex flex-col md:flex-row gap-4 justify-between">
         <div class="w-full md:w-1/2">
-            <input type="text" wire:model.live.debounce.300ms="search" placeholder="Cari referensi (DEMO-...) atau nomor order..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <input type="text" wire:model.live.debounce.300ms="search" placeholder="Cari referensi (DEMO-...) atau nomor order..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
         <div class="w-full md:w-1/3">
-            <select wire:model.live="statusFilter" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <select wire:model.live="statusFilter" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="">Semua Status Pembayaran</option>
                 <option value="PAID">PAID (Berhasil)</option>
                 <option value="PENDING">PENDING (Menunggu)</option>
@@ -40,7 +40,7 @@
                                 {{ $payment->payment_reference }}
                             </td>
                             <td class="py-4 px-4 font-mono text-xs">
-                                <a href="{{ route('admin.orders.show', $payment->order->id) }}" class="text-indigo-600 font-bold hover:underline">
+                                <a href="{{ route('admin.orders.show', $payment->order->id) }}" class="text-blue-600 font-bold hover:underline">
                                     {{ $payment->order->order_number }}
                                 </a>
                             </td>

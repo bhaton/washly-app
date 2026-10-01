@@ -10,9 +10,9 @@
     </div>
 
     <!-- Status Header Banner -->
-    <div class="bg-indigo-600 rounded-3xl p-6 text-white shadow-xl flex items-center justify-between">
+    <div class="bg-blue-600 rounded-3xl p-6 text-white shadow-xl flex items-center justify-between">
         <div>
-            <span class="text-xs font-bold text-indigo-200 uppercase tracking-widest block">Status Terkini</span>
+            <span class="text-xs font-bold text-blue-200 uppercase tracking-widest block">Status Terkini</span>
             <p class="text-2xl font-black mt-1">{{ str_replace('_', ' ', $order->status) }}</p>
         </div>
         <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-2xl font-bold">
@@ -58,7 +58,7 @@
                 <div class="relative">
                     <!-- Circle node -->
                     <div class="absolute -left-[42px] top-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-all
-                        {{ $isCurrent ? 'bg-indigo-600 text-white ring-4 ring-indigo-100' : ($isPassed ? 'bg-emerald-500 text-white' : 'bg-slate-200 text-slate-400') }}">
+                        {{ $isCurrent ? 'bg-blue-600 text-white ring-4 ring-blue-100' : ($isPassed ? 'bg-emerald-500 text-white' : 'bg-slate-200 text-slate-400') }}">
                         {{ $isPassed ? '✓' : ($thisIndex + 1) }}
                     </div>
 
@@ -77,7 +77,7 @@
                         </p>
 
                         @if($isCurrent)
-                            <div class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-700 animate-pulse">
+                            <div class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-700 animate-pulse">
                                 ● SEMENTARA DIPROSES
                             </div>
                         @endif

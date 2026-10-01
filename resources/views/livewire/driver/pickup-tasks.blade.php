@@ -10,7 +10,7 @@
         @forelse($pickupOrders as $order)
             <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-4">
                 <div class="flex justify-between items-start">
-                    <span class="font-mono font-extrabold text-sm text-indigo-600">{{ $order->order_number }}</span>
+                    <span class="font-mono font-extrabold text-sm text-blue-600">{{ $order->order_number }}</span>
                     <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">
                         {{ str_replace('_', ' ', $order->status) }}
                     </span>
@@ -21,7 +21,7 @@
                     <p class="text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-200">{{ $order->pickup_address }}</p>
                     <p class="text-slate-500 font-semibold">Jadwal: {{ $order->pickup_date ? $order->pickup_date->format('d M Y') : '-' }} ({{ $order->pickup_time }})</p>
                     @if($order->pickup_notes)
-                        <p class="text-indigo-600 bg-indigo-50/60 p-2 rounded-lg italic">Catatan: "{{ $order->pickup_notes }}"</p>
+                        <p class="text-blue-600 bg-blue-50/60 p-2 rounded-lg italic">Catatan: "{{ $order->pickup_notes }}"</p>
                     @endif
                 </div>
 
@@ -36,7 +36,7 @@
                     </div>
 
                     @if($order->status === 'PICKUP_ASSIGNED')
-                        <button wire:click="startPickup({{ $order->id }})" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-xl shadow-md">
+                        <button wire:click="startPickup({{ $order->id }})" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl shadow-md">
                             🚀 Mulai Perjalanan Pickup
                         </button>
                     @elseif($order->status === 'DRIVER_GOING_TO_PICKUP')
@@ -67,7 +67,7 @@
                 <form wire:submit.prevent="completePickup" class="space-y-4">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Foto Bukti Pickup (Mandatori)</label>
-                        <input type="file" wire:model="proofPhoto" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                        <input type="file" wire:model="proofPhoto" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                         @error('proofPhoto') <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span> @enderror
 
                         @if ($proofPhoto)

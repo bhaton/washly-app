@@ -6,10 +6,10 @@
             <p class="text-sm text-slate-500">Ringkasan pendapatan, item terlaris, dan kinerja driver.</p>
         </div>
         <div class="flex items-center space-x-2 bg-white p-1 rounded-2xl border border-slate-200 shadow-xs">
-            <button wire:click="$set('period', 'today')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all {{ $period === 'today' ? 'bg-indigo-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100' }}">Hari Ini</button>
-            <button wire:click="$set('period', 'week')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all {{ $period === 'week' ? 'bg-indigo-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100' }}">Minggu Ini</button>
-            <button wire:click="$set('period', 'month')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all {{ $period === 'month' ? 'bg-indigo-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100' }}">Bulan Ini</button>
-            <button wire:click="$set('period', 'all')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all {{ $period === 'all' ? 'bg-indigo-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100' }}">Semua Waktu</button>
+            <button wire:click="$set('period', 'today')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all {{ $period === 'today' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100' }}">Hari Ini</button>
+            <button wire:click="$set('period', 'week')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all {{ $period === 'week' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100' }}">Minggu Ini</button>
+            <button wire:click="$set('period', 'month')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all {{ $period === 'month' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100' }}">Bulan Ini</button>
+            <button wire:click="$set('period', 'all')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all {{ $period === 'all' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100' }}">Semua Waktu</button>
         </div>
     </div>
 
@@ -25,7 +25,7 @@
         </div>
         <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs">
             <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Order Selesai</span>
-            <p class="text-2xl font-black text-indigo-600 mt-2">{{ $completedOrders }}</p>
+            <p class="text-2xl font-black text-blue-600 mt-2">{{ $completedOrders }}</p>
         </div>
         <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs">
             <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Order Dibatalkan</span>
@@ -51,7 +51,7 @@
                         @forelse($topItems as $item)
                             <tr>
                                 <td class="py-3 px-3 font-bold text-slate-800 text-xs">{{ $item->service_name }}</td>
-                                <td class="py-3 px-3 font-extrabold text-indigo-600 text-xs">{{ $item->total_qty }} pcs</td>
+                                <td class="py-3 px-3 font-extrabold text-blue-600 text-xs">{{ $item->total_qty }} pcs</td>
                                 <td class="py-3 px-3 text-right font-mono font-extrabold text-slate-900 text-xs">
                                     Rp{{ number_format($item->total_revenue, 0, ',', '.') }}
                                 </td>
@@ -82,8 +82,8 @@
                         @forelse($drivers as $driver)
                             <tr>
                                 <td class="py-3 px-3 font-bold text-slate-800 text-xs">{{ $driver->name }}</td>
-                                <td class="py-3 px-3 font-bold text-indigo-600 text-xs">{{ $driver->completed_pickups }} Pickups</td>
-                                <td class="py-3 px-3 text-right font-bold text-violet-600 text-xs">{{ $driver->completed_deliveries }} Deliveries</td>
+                                <td class="py-3 px-3 font-bold text-blue-600 text-xs">{{ $driver->completed_pickups }} Pickups</td>
+                                <td class="py-3 px-3 text-right font-bold text-sky-600 text-xs">{{ $driver->completed_deliveries }} Deliveries</td>
                             </tr>
                         @empty
                             <tr>

@@ -4,7 +4,7 @@
             <h1 class="text-2xl font-black text-slate-900 tracking-tight">Riwayat Pesanan Saya</h1>
             <p class="text-sm text-slate-500">Daftar seluruh pesanan laundry dan status pengerjaannya.</p>
         </div>
-        <a href="{{ route('customer.orders.create') }}" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-xl shadow-md transition-all">
+        <a href="{{ route('customer.orders.create') }}" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl shadow-md transition-all">
             + Buat Pesanan Baru
         </a>
     </div>
@@ -36,7 +36,7 @@
                     <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold w-max
                         @if($order->status === 'COMPLETED') bg-emerald-100 text-emerald-800
                         @elseif(in_array($order->status, ['PENDING_PAYMENT', 'WAITING_CONFIRMATION'])) bg-amber-100 text-amber-800
-                        @else bg-indigo-100 text-indigo-800 @endif">
+                        @else bg-blue-100 text-blue-800 @endif">
                         {{ str_replace('_', ' ', $order->status) }}
                     </span>
                 </div>
@@ -48,12 +48,12 @@
                     </div>
                     <div class="text-left sm:text-right">
                         <span class="text-slate-400 text-[10px] uppercase font-bold block">Total Pembayaran</span>
-                        <span class="text-lg font-black text-indigo-600">Rp{{ number_format($order->total, 0, ',', '.') }}</span>
+                        <span class="text-lg font-black text-blue-600">Rp{{ number_format($order->total, 0, ',', '.') }}</span>
                     </div>
                 </div>
 
                 <div class="pt-3 border-t border-slate-100 flex justify-end space-x-3">
-                    <a href="{{ route('customer.tracking', $order->id) }}" class="px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs rounded-xl border border-indigo-200">
+                    <a href="{{ route('customer.tracking', $order->id) }}" class="px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs rounded-xl border border-blue-200">
                         📍 Lacak Live Status
                     </a>
                     <a href="{{ route('customer.orders.show', $order->id) }}" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl">

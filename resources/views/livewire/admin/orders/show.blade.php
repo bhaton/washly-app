@@ -3,7 +3,7 @@
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
             <div class="flex items-center space-x-3">
-                <a href="{{ route('admin.orders.index') }}" class="p-2 bg-white rounded-xl border border-slate-200 text-slate-500 hover:text-indigo-600">
+                <a href="{{ route('admin.orders.index') }}" class="p-2 bg-white rounded-xl border border-slate-200 text-slate-500 hover:text-blue-600">
                     &larr;
                 </a>
                 <h1 class="text-2xl font-black text-slate-900 tracking-tight">Detail Order {{ $order->order_number }}</h1>
@@ -15,7 +15,7 @@
             @if($order->status === 'COMPLETED') bg-emerald-100 text-emerald-800 border border-emerald-200
             @elseif(in_array($order->status, ['PENDING_PAYMENT', 'WAITING_CONFIRMATION'])) bg-amber-100 text-amber-800 border border-amber-200
             @elseif(in_array($order->status, ['PROCESSING', 'RECEIVED_AT_OUTLET'])) bg-blue-100 text-blue-800 border border-blue-200
-            @else bg-purple-100 text-purple-800 border border-purple-200 @endif">
+            @else bg-cyan-100 text-cyan-800 border border-cyan-200 @endif">
             STATUS: {{ str_replace('_', ' ', $order->status) }}
         </span>
     </div>
@@ -50,7 +50,7 @@
                     </div>
                     <div class="flex justify-between text-lg font-extrabold text-slate-900 pt-2 border-t border-slate-100">
                         <span>Total Pembayaran</span>
-                        <span class="text-indigo-600">Rp{{ number_format($order->total, 0, ',', '.') }}</span>
+                        <span class="text-blue-600">Rp{{ number_format($order->total, 0, ',', '.') }}</span>
                     </div>
                 </div>
             </div>
@@ -92,7 +92,7 @@
                 <div class="relative pl-6 border-l-2 border-slate-200 space-y-6">
                     @foreach($order->statusHistories as $history)
                         <div class="relative">
-                            <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-indigo-600 border-2 border-white"></div>
+                            <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-blue-600 border-2 border-white"></div>
                             <div class="flex justify-between items-start">
                                 <div>
                                     <p class="font-bold text-slate-800 text-xs">{{ str_replace('_', ' ', $history->to_status) }}</p>
@@ -121,7 +121,7 @@
                             ✓ Konfirmasi Order Outlet
                         </button>
                     @elseif($order->status === 'CONFIRMED')
-                        <button wire:click="transitionTo('WAITING_PICKUP', app('App\\Services\\OrderStatusService'))" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all">
+                        <button wire:click="transitionTo('WAITING_PICKUP', app('App\\Services\\OrderStatusService'))" class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all">
                             🛵 Siapkan Penugasan Pickup
                         </button>
                     @elseif($order->status === 'PICKED_UP')
@@ -129,7 +129,7 @@
                             🧺 Terima Laundry di Outlet
                         </button>
                     @elseif($order->status === 'RECEIVED_AT_OUTLET')
-                        <button wire:click="transitionTo('PROCESSING', app('App\\Services\\OrderStatusService'))" class="w-full py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all">
+                        <button wire:click="transitionTo('PROCESSING', app('App\\Services\\OrderStatusService'))" class="w-full py-2 bg-cyan-600 hover:bg-cyan-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all">
                             ⚙️ Mulai Proses Laundry
                         </button>
                     @elseif($order->status === 'PROCESSING')
@@ -179,7 +179,7 @@
                             <option value="{{ $driver->id }}">{{ $driver->name }} ({{ $driver->phone }})</option>
                         @endforeach
                     </select>
-                    <button wire:click="assignPickupDriver" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs">
+                    <button wire:click="assignPickupDriver" class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-xs">
                         Assign Pickup Driver
                     </button>
                 </div>
@@ -195,7 +195,7 @@
                             <option value="{{ $driver->id }}">{{ $driver->name }} ({{ $driver->phone }})</option>
                         @endforeach
                     </select>
-                    <button wire:click="assignDeliveryDriver" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs">
+                    <button wire:click="assignDeliveryDriver" class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-xs">
                         Assign Delivery Driver
                     </button>
                 </div>

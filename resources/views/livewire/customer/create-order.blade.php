@@ -3,25 +3,25 @@
     <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs">
         <div class="flex items-center justify-between">
             <button type="button" @if($step > 1) wire:click="$set('step', 1)" @endif class="flex items-center space-x-2 text-left focus:outline-none">
-                <div class="w-8 h-8 rounded-full font-bold text-xs flex items-center justify-center transition-all {{ $step >= 1 ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-400' }}">1</div>
+                <div class="w-8 h-8 rounded-full font-bold text-xs flex items-center justify-center transition-all {{ $step >= 1 ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-400' }}">1</div>
                 <span class="text-xs font-semibold hidden sm:inline {{ $step >= 1 ? 'text-slate-900 font-bold' : 'text-slate-400' }}">Pilih Item</span>
             </button>
             <div class="h-0.5 flex-1 bg-slate-200 mx-2"></div>
 
             <button type="button" @if($step > 2) wire:click="$set('step', 2)" @endif class="flex items-center space-x-2 text-left focus:outline-none">
-                <div class="w-8 h-8 rounded-full font-bold text-xs flex items-center justify-center transition-all {{ $step >= 2 ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-400' }}">2</div>
+                <div class="w-8 h-8 rounded-full font-bold text-xs flex items-center justify-center transition-all {{ $step >= 2 ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-400' }}">2</div>
                 <span class="text-xs font-semibold hidden sm:inline {{ $step >= 2 ? 'text-slate-900 font-bold' : 'text-slate-400' }}">Pickup</span>
             </button>
             <div class="h-0.5 flex-1 bg-slate-200 mx-2"></div>
 
             <button type="button" @if($step > 3) wire:click="$set('step', 3)" @endif class="flex items-center space-x-2 text-left focus:outline-none">
-                <div class="w-8 h-8 rounded-full font-bold text-xs flex items-center justify-center transition-all {{ $step >= 3 ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-400' }}">3</div>
+                <div class="w-8 h-8 rounded-full font-bold text-xs flex items-center justify-center transition-all {{ $step >= 3 ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-400' }}">3</div>
                 <span class="text-xs font-semibold hidden sm:inline {{ $step >= 3 ? 'text-slate-900 font-bold' : 'text-slate-400' }}">Delivery</span>
             </button>
             <div class="h-0.5 flex-1 bg-slate-200 mx-2"></div>
 
             <button type="button" @if($step > 4) wire:click="$set('step', 4)" @endif class="flex items-center space-x-2 text-left focus:outline-none">
-                <div class="w-8 h-8 rounded-full font-bold text-xs flex items-center justify-center transition-all {{ $step >= 4 ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-400' }}">4</div>
+                <div class="w-8 h-8 rounded-full font-bold text-xs flex items-center justify-center transition-all {{ $step >= 4 ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-400' }}">4</div>
                 <span class="text-xs font-semibold hidden sm:inline {{ $step >= 4 ? 'text-slate-900 font-bold' : 'text-slate-400' }}">Review</span>
             </button>
             <div class="h-0.5 flex-1 bg-slate-200 mx-2"></div>
@@ -50,11 +50,11 @@
 
             <div class="space-y-4">
                 @foreach($services as $service)
-                    <div wire:key="service-item-{{ $service->id }}" class="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-indigo-300 transition-colors">
+                    <div wire:key="service-item-{{ $service->id }}" class="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-blue-300 transition-colors">
                         <div class="space-y-1">
                             <h4 class="font-extrabold text-slate-900 text-base">{{ $service->name }}</h4>
                             <p class="text-xs text-slate-500 max-w-md">{{ $service->description }}</p>
-                            <span class="inline-block text-sm font-black text-indigo-600">Rp{{ number_format($service->price, 0, ',', '.') }} <span class="text-xs font-normal text-slate-400">/ pcs</span></span>
+                            <span class="inline-block text-sm font-black text-blue-600">Rp{{ number_format($service->price, 0, ',', '.') }} <span class="text-xs font-normal text-slate-400">/ pcs</span></span>
                         </div>
 
                         <!-- Interactive Active Quantity Control (Direct Input + Touch Buttons) -->
@@ -63,9 +63,9 @@
                                 -
                             </button>
                             
-                            <input type="number" min="0" wire:key="qty-input-{{ $service->id }}" value="{{ $quantities[$service->id] ?? 0 }}" wire:change="updateQuantity({{ $service->id }}, $event.target.value)" class="w-14 text-center font-extrabold text-slate-900 text-base bg-slate-50 border border-slate-200 rounded-lg py-1 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <input type="number" min="0" wire:key="qty-input-{{ $service->id }}" value="{{ $quantities[$service->id] ?? 0 }}" wire:change="updateQuantity({{ $service->id }}, $event.target.value)" class="w-14 text-center font-extrabold text-slate-900 text-base bg-slate-50 border border-slate-200 rounded-lg py-1 focus:ring-2 focus:ring-blue-500 focus:outline-none">
 
-                            <button type="button" wire:key="btn-inc-{{ $service->id }}" wire:click="incrementQuantity({{ $service->id }})" class="w-9 h-9 rounded-lg bg-indigo-600 hover:bg-indigo-700 active:scale-95 font-black text-white text-xl flex items-center justify-center shadow-xs transition-all select-none cursor-pointer">
+                            <button type="button" wire:key="btn-inc-{{ $service->id }}" wire:click="incrementQuantity({{ $service->id }})" class="w-9 h-9 rounded-lg bg-blue-600 hover:bg-blue-700 active:scale-95 font-black text-white text-xl flex items-center justify-center shadow-xs transition-all select-none cursor-pointer">
                                 +
                             </button>
                         </div>
@@ -77,9 +77,9 @@
             <div class="pt-6 border-t border-slate-200 flex items-center justify-between">
                 <div>
                     <span class="text-xs text-slate-400 font-bold uppercase block">Estimasi Subtotal</span>
-                    <span class="text-2xl font-black text-indigo-600">Rp{{ number_format($totals['subtotal'], 0, ',', '.') }}</span>
+                    <span class="text-2xl font-black text-blue-600">Rp{{ number_format($totals['subtotal'], 0, ',', '.') }}</span>
                 </div>
-                <button type="button" wire:click="goToStep2" class="px-6 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-sm rounded-2xl shadow-lg transition-all hover:scale-105">
+                <button type="button" wire:click="goToStep2" class="px-6 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-sm rounded-2xl shadow-lg transition-all hover:scale-105">
                     Lanjut ke Lokasi Pickup &rarr;
                 </button>
             </div>
@@ -141,7 +141,7 @@
                 <button type="button" wire:click="$set('step', 1)" class="px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm rounded-2xl">
                     &larr; Kembali
                 </button>
-                <button type="button" wire:click="goToStep3" class="px-6 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-sm rounded-2xl shadow-lg transition-all">
+                <button type="button" wire:click="goToStep3" class="px-6 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-sm rounded-2xl shadow-lg transition-all">
                     Lanjut ke Lokasi Delivery &rarr;
                 </button>
             </div>
@@ -156,8 +156,8 @@
                 <p class="text-xs text-slate-500 mt-1">Tentukan lokasi di mana laundry bersih akan diantarkan.</p>
             </div>
 
-            <div class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-100 flex items-center space-x-3">
-                <input type="checkbox" id="sameAsPickup" wire:model.live="sameAsPickup" class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500">
+            <div class="p-4 rounded-2xl bg-blue-50/70 border border-blue-100 flex items-center space-x-3">
+                <input type="checkbox" id="sameAsPickup" wire:model.live="sameAsPickup" class="w-5 h-5 rounded text-blue-600 focus:ring-blue-500">
                 <label for="sameAsPickup" class="text-sm font-bold text-slate-800 cursor-pointer">
                     Sama dengan Alamat Penjemputan (Pickup)
                 </label>
@@ -194,7 +194,7 @@
                 <button type="button" wire:click="$set('step', 2)" class="px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm rounded-2xl">
                     &larr; Kembali
                 </button>
-                <button type="button" wire:click="goToStep4" class="px-6 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-sm rounded-2xl shadow-lg transition-all">
+                <button type="button" wire:click="goToStep4" class="px-6 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-sm rounded-2xl shadow-lg transition-all">
                     Review Order &rarr;
                 </button>
             </div>
@@ -228,21 +228,21 @@
             <!-- Address Summary -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                 <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                    <span class="text-indigo-600 font-extrabold block uppercase mb-1">🚚 Penjemputan (Pickup)</span>
+                    <span class="text-blue-600 font-extrabold block uppercase mb-1">🚚 Penjemputan (Pickup)</span>
                     <p class="font-bold text-slate-800 text-sm">{{ $pickup_name }} ({{ $pickup_phone }})</p>
                     <p class="text-slate-600 mt-1">{{ $pickup_address }}</p>
                     <p class="text-slate-500 font-semibold mt-2">Jadwal: {{ date('d M Y', strtotime($pickup_date)) }} - {{ $pickup_time }} WIB</p>
                 </div>
 
                 <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                    <span class="text-violet-600 font-extrabold block uppercase mb-1">📦 Pengantaran (Delivery)</span>
+                    <span class="text-sky-600 font-extrabold block uppercase mb-1">📦 Pengantaran (Delivery)</span>
                     <p class="font-bold text-slate-800 text-sm">{{ $sameAsPickup ? $pickup_name : $delivery_name }} ({{ $sameAsPickup ? $pickup_phone : $delivery_phone }})</p>
                     <p class="text-slate-600 mt-1">{{ $sameAsPickup ? $pickup_address : $delivery_address }}</p>
                 </div>
             </div>
 
             <!-- Pricing Summary Card -->
-            <div class="p-5 rounded-2xl bg-indigo-50/70 border border-indigo-100 space-y-2 text-sm">
+            <div class="p-5 rounded-2xl bg-blue-50/70 border border-blue-100 space-y-2 text-sm">
                 <div class="flex justify-between text-slate-700">
                     <span>Subtotal Items</span>
                     <span class="font-bold">Rp{{ number_format($totals['subtotal'], 0, ',', '.') }}</span>
@@ -251,9 +251,9 @@
                     <span>Ongkos Kirim Pickup & Delivery</span>
                     <span>GRATIS (Rp 0)</span>
                 </div>
-                <div class="pt-3 border-t border-indigo-200 flex justify-between items-center text-lg font-black text-slate-900">
+                <div class="pt-3 border-t border-blue-200 flex justify-between items-center text-lg font-black text-slate-900">
                     <span>TOTAL BAYAR</span>
-                    <span class="text-indigo-700 text-2xl">Rp{{ number_format($totals['total'], 0, ',', '.') }}</span>
+                    <span class="text-blue-700 text-2xl">Rp{{ number_format($totals['total'], 0, ',', '.') }}</span>
                 </div>
             </div>
 
@@ -280,7 +280,7 @@
 
             <div class="p-4 bg-slate-50 rounded-3xl border border-slate-200 max-w-sm mx-auto space-y-3">
                 <span class="text-xs text-slate-400 font-bold block">TOTAL PEMBAYARAN</span>
-                <p class="text-3xl font-black text-indigo-600">Rp{{ number_format($createdOrder->total, 0, ',', '.') }}</p>
+                <p class="text-3xl font-black text-blue-600">Rp{{ number_format($createdOrder->total, 0, ',', '.') }}</p>
 
                 <!-- Dummy QRIS Image -->
                 <div class="bg-white p-4 rounded-2xl border border-slate-200 inline-block shadow-inner">

@@ -4,13 +4,13 @@
             <h1 class="text-2xl font-black text-slate-900 tracking-tight">Manajemen Driver Lapangan</h1>
             <p class="text-sm text-slate-500">Kelola akun driver pickup & delivery, status keaktifan, dan beban kerja.</p>
         </div>
-        <button wire:click="openCreateModal" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-xl shadow-md transition-all">
+        <button wire:click="openCreateModal" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl shadow-md transition-all">
             + Tambah Driver Baru
         </button>
     </div>
 
     <div class="bg-white rounded-3xl p-4 sm:p-6 border border-slate-200/80 shadow-xs">
-        <input type="text" wire:model.live.debounce.300ms="search" placeholder="Cari nama driver, email, atau HP..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        <input type="text" wire:model.live.debounce.300ms="search" placeholder="Cari nama driver, email, atau HP..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
     </div>
 
     <div class="bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
@@ -49,8 +49,8 @@
                                 </button>
                             </td>
                             <td class="py-4 px-4 text-xs space-x-1">
-                                <span class="px-2 py-0.5 bg-indigo-50 text-indigo-700 font-bold rounded-md">{{ $driver->pickup_tasks_count }} Pickups</span>
-                                <span class="px-2 py-0.5 bg-violet-50 text-violet-700 font-bold rounded-md">{{ $driver->delivery_tasks_count }} Deliveries</span>
+                                <span class="px-2 py-0.5 bg-blue-50 text-blue-700 font-bold rounded-md">{{ $driver->pickup_tasks_count }} Pickups</span>
+                                <span class="px-2 py-0.5 bg-sky-50 text-sky-700 font-bold rounded-md">{{ $driver->delivery_tasks_count }} Deliveries</span>
                             </td>
                             <td class="py-4 px-4 text-right">
                                 <button wire:click="openEditModal({{ $driver->id }})" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-lg transition-colors">
@@ -107,7 +107,7 @@
                         @error('password') <span class="text-xs text-rose-500">{{ $message }}</span> @enderror
                     </div>
                     <div class="flex items-center space-x-2 pt-2">
-                        <input type="checkbox" id="is_active" wire:model="is_active" class="rounded text-indigo-600 focus:ring-indigo-500">
+                        <input type="checkbox" id="is_active" wire:model="is_active" class="rounded text-blue-600 focus:ring-blue-500">
                         <label for="is_active" class="text-xs font-bold text-slate-700">Driver Aktif (Dapat Diberikan Tugas)</label>
                     </div>
                 </div>
@@ -116,7 +116,7 @@
                     <button wire:click="$set('showModal', false)" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl">
                         Batal
                     </button>
-                    <button wire:click="saveDriver" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md">
+                    <button wire:click="saveDriver" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md">
                         Simpan Data
                     </button>
                 </div>

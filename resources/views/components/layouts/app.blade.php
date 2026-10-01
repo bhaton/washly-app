@@ -24,14 +24,12 @@
                 <!-- Left: Brand Logo & Links -->
                 <div class="flex items-center space-x-8">
                     <a href="{{ route('home') }}" class="flex items-center space-x-3 group">
-                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
-                            </svg>
+                        <div class="w-10 h-10 rounded-xl overflow-hidden shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform shrink-0">
+                            <img src="{{ asset('images/logo.png') }}" alt="Washly Logo" class="w-full h-full object-contain">
                         </div>
-                        <div>
-                            <span class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-indigo-700 via-indigo-600 to-violet-600 bg-clip-text text-transparent">WASHLY</span>
-                            <span class="text-xs font-semibold text-indigo-500 block -mt-1 tracking-wider uppercase">Laundry</span>
+                        <div class="w-fit">
+                            <span class="block font-extrabold text-xl tracking-tight bg-gradient-to-r from-blue-700 via-blue-600 to-sky-600 bg-clip-text text-transparent">WASHLY</span>
+                            <span class="block w-full text-center text-xs font-semibold text-blue-500 tracking-wider uppercase">Laundry</span>
                         </div>
                     </a>
 
@@ -39,21 +37,21 @@
                     <div class="hidden md:flex md:space-x-1">
                         @auth
                             @if(auth()->user()->hasRole('admin'))
-                                <a href="{{ route('admin.dashboard') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('admin.dashboard') ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-slate-50' }}">Dashboard</a>
-                                <a href="{{ route('admin.orders.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('admin.orders.*') ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-slate-50' }}">Pesanan</a>
-                                <a href="{{ route('admin.customers.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('admin.customers.*') ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-slate-50' }}">Pelanggan</a>
-                                <a href="{{ route('admin.drivers.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('admin.drivers.*') ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-slate-50' }}">Driver</a>
-                                <a href="{{ route('admin.services.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('admin.services.*') ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-slate-50' }}">Layanan</a>
-                                <a href="{{ route('admin.payments.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('admin.payments.*') ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-slate-50' }}">Pembayaran</a>
-                                <a href="{{ route('admin.reports.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('admin.reports.*') ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-slate-50' }}">Laporan</a>
+                                <a href="{{ route('admin.dashboard') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('admin.dashboard') ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">Dashboard</a>
+                                <a href="{{ route('admin.orders.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('admin.orders.*') ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">Pesanan</a>
+                                <a href="{{ route('admin.customers.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('admin.customers.*') ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">Pelanggan</a>
+                                <a href="{{ route('admin.drivers.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('admin.drivers.*') ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">Driver</a>
+                                <a href="{{ route('admin.services.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('admin.services.*') ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">Layanan</a>
+                                <a href="{{ route('admin.payments.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('admin.payments.*') ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">Pembayaran</a>
+                                <a href="{{ route('admin.reports.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('admin.reports.*') ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">Laporan</a>
                             @elseif(auth()->user()->hasRole('driver'))
-                                <a href="{{ route('driver.dashboard') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('driver.dashboard') ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-slate-50' }}">Dashboard Driver</a>
-                                <a href="{{ route('driver.pickups') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('driver.pickups') ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-slate-50' }}">Tugas Pickup</a>
-                                <a href="{{ route('driver.deliveries') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('driver.deliveries') ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-slate-50' }}">Tugas Delivery</a>
+                                <a href="{{ route('driver.dashboard') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('driver.dashboard') ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">Dashboard Driver</a>
+                                <a href="{{ route('driver.pickups') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('driver.pickups') ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">Tugas Pickup</a>
+                                <a href="{{ route('driver.deliveries') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('driver.deliveries') ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">Tugas Delivery</a>
                             @else
-                                <a href="{{ route('customer.dashboard') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('customer.dashboard') ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-slate-50' }}">Dashboard</a>
-                                <a href="{{ route('customer.orders.create') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('customer.orders.create') ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-slate-50' }}">Buat Pesanan</a>
-                                <a href="{{ route('customer.orders.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('customer.orders.index') ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600 hover:bg-slate-50' }}">Riwayat Order</a>
+                                <a href="{{ route('customer.dashboard') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('customer.dashboard') ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">Dashboard</a>
+                                <a href="{{ route('customer.orders.create') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('customer.orders.create') ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">Buat Pesanan</a>
+                                <a href="{{ route('customer.orders.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('customer.orders.index') ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">Riwayat Order</a>
                             @endif
                         @endauth
                     </div>
@@ -64,11 +62,11 @@
                     @auth
                         <!-- Role Badge -->
                         @if(auth()->user()->hasRole('admin'))
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 border border-purple-200">
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-100 text-cyan-800 border border-cyan-200">
                                 Outlet Admin
                             </span>
                         @elseif(auth()->user()->hasRole('driver'))
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200">
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-100 text-sky-800 border border-sky-200">
                                 Driver Lapangan
                             </span>
                         @else
@@ -80,7 +78,7 @@
                         <!-- Profile Dropdown -->
                         <div class="relative" x-data="{ dropdownOpen: false }">
                             <button @click="dropdownOpen = !dropdownOpen" class="flex items-center space-x-2 text-sm focus:outline-none p-1.5 rounded-lg hover:bg-slate-100">
-                                <div class="w-8 h-8 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center">
+                                <div class="w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center">
                                     {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                                 </div>
                                 <span class="font-medium text-slate-700">{{ auth()->user()->name }}</span>
@@ -94,7 +92,7 @@
                                     <p class="text-xs text-slate-400">Login sebagai</p>
                                     <p class="text-sm font-semibold text-slate-800 truncate">{{ auth()->user()->email }}</p>
                                 </div>
-                                <a href="{{ route('profile') }}" class="block px-4 py-2 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-600">Pengaturan Profil</a>
+                                <a href="{{ route('profile') }}" class="block px-4 py-2 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-600">Pengaturan Profil</a>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <button type="submit" class="w-full text-left block px-4 py-2 text-sm text-rose-600 hover:bg-rose-50">Log Out</button>
@@ -102,8 +100,8 @@
                             </div>
                         </div>
                     @else
-                        <a href="{{ route('login') }}" class="text-sm font-semibold text-slate-700 hover:text-indigo-600 px-3 py-2">Masuk</a>
-                        <a href="{{ route('register') }}" class="inline-flex items-center justify-center px-4 py-2 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md shadow-indigo-500/20 transition-all">Daftar Sekarang</a>
+                        <a href="{{ route('login') }}" class="text-sm font-semibold text-slate-700 hover:text-blue-600 px-3 py-2">Masuk</a>
+                        <a href="{{ route('register') }}" class="inline-flex items-center justify-center px-4 py-2 rounded-xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-500/20 transition-all">Daftar Sekarang</a>
                     @endauth
                 </div>
 
@@ -127,30 +125,30 @@
                     <p class="text-xs text-slate-500">{{ auth()->user()->email }}</p>
                 </div>
                 @if(auth()->user()->hasRole('admin'))
-                    <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-indigo-50">Dashboard</a>
-                    <a href="{{ route('admin.orders.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-indigo-50">Pesanan</a>
-                    <a href="{{ route('admin.customers.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-indigo-50">Pelanggan</a>
-                    <a href="{{ route('admin.drivers.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-indigo-50">Driver</a>
-                    <a href="{{ route('admin.services.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-indigo-50">Layanan</a>
-                    <a href="{{ route('admin.payments.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-indigo-50">Pembayaran</a>
-                    <a href="{{ route('admin.reports.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-indigo-50">Laporan</a>
+                    <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-blue-50">Dashboard</a>
+                    <a href="{{ route('admin.orders.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-blue-50">Pesanan</a>
+                    <a href="{{ route('admin.customers.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-blue-50">Pelanggan</a>
+                    <a href="{{ route('admin.drivers.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-blue-50">Driver</a>
+                    <a href="{{ route('admin.services.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-blue-50">Layanan</a>
+                    <a href="{{ route('admin.payments.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-blue-50">Pembayaran</a>
+                    <a href="{{ route('admin.reports.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-blue-50">Laporan</a>
                 @elseif(auth()->user()->hasRole('driver'))
-                    <a href="{{ route('driver.dashboard') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-indigo-50">Dashboard Driver</a>
-                    <a href="{{ route('driver.pickups') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-indigo-50">Tugas Pickup</a>
-                    <a href="{{ route('driver.deliveries') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-indigo-50">Tugas Delivery</a>
+                    <a href="{{ route('driver.dashboard') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-blue-50">Dashboard Driver</a>
+                    <a href="{{ route('driver.pickups') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-blue-50">Tugas Pickup</a>
+                    <a href="{{ route('driver.deliveries') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-blue-50">Tugas Delivery</a>
                 @else
-                    <a href="{{ route('customer.dashboard') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-indigo-50">Dashboard</a>
-                    <a href="{{ route('customer.orders.create') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-indigo-50">Buat Pesanan</a>
-                    <a href="{{ route('customer.orders.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-indigo-50">Riwayat Order</a>
+                    <a href="{{ route('customer.dashboard') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-blue-50">Dashboard</a>
+                    <a href="{{ route('customer.orders.create') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-blue-50">Buat Pesanan</a>
+                    <a href="{{ route('customer.orders.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-blue-50">Riwayat Order</a>
                 @endif
-                <a href="{{ route('profile') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-indigo-50">Profil Saya</a>
+                <a href="{{ route('profile') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-blue-50">Profil Saya</a>
                 <form method="POST" action="{{ route('logout') }}" class="pt-2">
                     @csrf
                     <button type="submit" class="w-full text-left px-3 py-2 rounded-lg text-base font-medium text-rose-600 hover:bg-rose-50">Log Out</button>
                 </form>
             @else
-                <a href="{{ route('login') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-indigo-50">Masuk</a>
-                <a href="{{ route('register') }}" class="block px-3 py-2 rounded-lg text-base font-semibold text-indigo-600 hover:bg-indigo-50">Daftar Akun Baru</a>
+                <a href="{{ route('login') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-blue-50">Masuk</a>
+                <a href="{{ route('register') }}" class="block px-3 py-2 rounded-lg text-base font-semibold text-blue-600 hover:bg-blue-50">Daftar Akun Baru</a>
             @endauth
         </div>
     </nav>
@@ -189,7 +187,9 @@
     <footer class="bg-white border-t border-slate-200 py-6 mt-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
             <div class="flex items-center space-x-2">
-                <div class="w-6 h-6 rounded-md bg-indigo-600 text-white flex items-center justify-center text-xs font-bold">W</div>
+                <div class="w-6 h-6 rounded-md overflow-hidden shrink-0">
+                    <img src="{{ asset('images/logo.png') }}" alt="Washly Logo" class="w-full h-full object-contain">
+                </div>
                 <span class="font-bold text-slate-700 text-sm">Washly Laundry System</span>
                 <span class="text-xs text-slate-400">| Single Outlet Pickup & Delivery</span>
             </div>

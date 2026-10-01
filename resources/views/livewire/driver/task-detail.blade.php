@@ -8,8 +8,8 @@
 
     <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-4">
         <div class="flex justify-between items-center pb-3 border-b border-slate-100">
-            <span class="font-mono font-bold text-sm text-indigo-600">{{ $order->order_number }}</span>
-            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-100 text-indigo-800">
+            <span class="font-mono font-bold text-sm text-blue-600">{{ $order->order_number }}</span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800">
                 {{ str_replace('_', ' ', $order->status) }}
             </span>
         </div>
@@ -35,12 +35,12 @@
             @if($taskType === 'pickup' && $order->pickup_notes)
                 <div>
                     <span class="text-slate-400 font-bold uppercase block">Catatan Pickup</span>
-                    <p class="italic text-slate-600 bg-indigo-50/50 p-2.5 rounded-xl border border-indigo-100">"{{ $order->pickup_notes }}"</p>
+                    <p class="italic text-slate-600 bg-blue-50/50 p-2.5 rounded-xl border border-blue-100">"{{ $order->pickup_notes }}"</p>
                 </div>
             @elseif($taskType === 'delivery' && $order->delivery_notes)
                 <div>
                     <span class="text-slate-400 font-bold uppercase block">Catatan Delivery</span>
-                    <p class="italic text-slate-600 bg-violet-50/50 p-2.5 rounded-xl border border-violet-100">"{{ $order->delivery_notes }}"</p>
+                    <p class="italic text-slate-600 bg-sky-50/50 p-2.5 rounded-xl border border-sky-100">"{{ $order->delivery_notes }}"</p>
                 </div>
             @endif
         </div>
@@ -52,7 +52,7 @@
             </a>
 
             @if(($taskType === 'pickup' && $order->status === 'PICKUP_ASSIGNED') || ($taskType === 'delivery' && $order->status === 'DELIVERY_ASSIGNED'))
-                <button wire:click="startTask" class="w-full py-3 bg-indigo-600 text-white font-bold text-xs rounded-xl shadow-md">
+                <button wire:click="startTask" class="w-full py-3 bg-blue-600 text-white font-bold text-xs rounded-xl shadow-md">
                     🚀 Mulai Perjalanan Sekarang
                 </button>
             @elseif(($taskType === 'pickup' && $order->status === 'DRIVER_GOING_TO_PICKUP') || ($taskType === 'delivery' && $order->status === 'DRIVER_GOING_TO_CUSTOMER'))

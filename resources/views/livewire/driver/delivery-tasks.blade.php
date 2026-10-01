@@ -10,8 +10,8 @@
         @forelse($deliveryOrders as $order)
             <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-4">
                 <div class="flex justify-between items-start">
-                    <span class="font-mono font-extrabold text-sm text-violet-600">{{ $order->order_number }}</span>
-                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-100 text-purple-800">
+                    <span class="font-mono font-extrabold text-sm text-sky-600">{{ $order->order_number }}</span>
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-cyan-100 text-cyan-800">
                         {{ str_replace('_', ' ', $order->status) }}
                     </span>
                 </div>
@@ -20,7 +20,7 @@
                     <p class="font-bold text-sm text-slate-900">{{ $order->delivery_name }}</p>
                     <p class="text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-200">{{ $order->delivery_address }}</p>
                     @if($order->delivery_notes)
-                        <p class="text-violet-600 bg-violet-50/60 p-2 rounded-lg italic">Catatan: "{{ $order->delivery_notes }}"</p>
+                        <p class="text-sky-600 bg-sky-50/60 p-2 rounded-lg italic">Catatan: "{{ $order->delivery_notes }}"</p>
                     @endif
                 </div>
 
@@ -35,7 +35,7 @@
                     </div>
 
                     @if($order->status === 'DELIVERY_ASSIGNED')
-                        <button wire:click="startDelivery({{ $order->id }})" class="w-full py-3 bg-violet-600 hover:bg-violet-700 text-white font-bold text-sm rounded-xl shadow-md">
+                        <button wire:click="startDelivery({{ $order->id }})" class="w-full py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm rounded-xl shadow-md">
                             🚀 Mulai Perjalanan Delivery
                         </button>
                     @elseif($order->status === 'DRIVER_GOING_TO_CUSTOMER')
@@ -66,7 +66,7 @@
                 <form wire:submit.prevent="completeDelivery" class="space-y-4">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Foto Bukti Delivery (Mandatori)</label>
-                        <input type="file" wire:model="proofPhoto" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100">
+                        <input type="file" wire:model="proofPhoto" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100">
                         @error('proofPhoto') <span class="text-xs text-rose-500 block mt-1">{{ $message }}</span> @enderror
 
                         @if ($proofPhoto)

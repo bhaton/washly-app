@@ -15,7 +15,7 @@
     </style>
     @livewireStyles
 </head>
-<body class="h-full font-sans antialiased text-slate-800 bg-gradient-to-br from-slate-50 via-indigo-50/40 to-slate-100 min-h-screen">
+<body class="h-full font-sans antialiased text-slate-800 bg-slate-50">
     {{ $slot }}
     @livewireScripts
 </body>

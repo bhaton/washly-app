@@ -7,7 +7,7 @@
     </div>
 
     <div class="bg-white rounded-3xl p-4 sm:p-6 border border-slate-200/80 shadow-xs">
-        <input type="text" wire:model.live.debounce.300ms="search" placeholder="Cari nama, email, atau nomor HP pelanggan..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        <input type="text" wire:model.live.debounce.300ms="search" placeholder="Cari nama, email, atau nomor HP pelanggan..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
     </div>
 
     <div class="bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
@@ -43,7 +43,7 @@
                                 {{ $customer->address ?? '-' }}
                             </td>
                             <td class="py-4 px-4">
-                                <span class="px-2.5 py-1 rounded-full text-xs font-extrabold bg-indigo-100 text-indigo-700">
+                                <span class="px-2.5 py-1 rounded-full text-xs font-extrabold bg-blue-100 text-blue-700">
                                     {{ $customer->customer_orders_count }} Order
                                 </span>
                             </td>

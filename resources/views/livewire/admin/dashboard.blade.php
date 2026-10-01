@@ -6,7 +6,7 @@
             <p class="text-sm text-slate-500">Ringkasan status order, driver aktif, dan performa harian.</p>
         </div>
         <div class="flex items-center space-x-3">
-            <a href="{{ route('admin.orders.index') }}" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-xl shadow-md transition-all">
+            <a href="{{ route('admin.orders.index') }}" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl shadow-md transition-all">
                 Kelola Semua Order &rarr;
             </a>
         </div>
@@ -28,7 +28,7 @@
         <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs">
             <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Order Masuk Hari Ini</span>
-                <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-lg">📦</div>
+                <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-lg">📦</div>
             </div>
             <p class="text-2xl font-extrabold text-slate-900 mt-2">{{ $todayOrdersCount }}</p>
             <span class="text-xs text-slate-500 mt-1 inline-block">Pesanan baru</span>
@@ -81,7 +81,7 @@
         <div class="lg:col-span-8 bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-extrabold text-slate-900 text-lg">10 Order Terbaru</h3>
-                <a href="{{ route('admin.orders.index') }}" class="text-xs font-bold text-indigo-600 hover:underline">Lihat Semua</a>
+                <a href="{{ route('admin.orders.index') }}" class="text-xs font-bold text-blue-600 hover:underline">Lihat Semua</a>
             </div>
 
             <div class="overflow-x-auto">
@@ -110,7 +110,7 @@
                                         @if($order->status === 'COMPLETED') bg-emerald-100 text-emerald-800
                                         @elseif(in_array($order->status, ['PENDING_PAYMENT', 'WAITING_CONFIRMATION'])) bg-amber-100 text-amber-800
                                         @elseif(in_array($order->status, ['PROCESSING', 'RECEIVED_AT_OUTLET'])) bg-blue-100 text-blue-800
-                                        @else bg-purple-100 text-purple-800 @endif">
+                                        @else bg-cyan-100 text-cyan-800 @endif">
                                         {{ str_replace('_', ' ', $order->status) }}
                                     </span>
                                 </td>
@@ -155,11 +155,11 @@
                         <div class="grid grid-cols-2 gap-2 text-center text-xs pt-2 border-t border-slate-200">
                             <div class="bg-white p-2 rounded-xl border border-slate-100">
                                 <span class="text-slate-400 block">Pickup Active</span>
-                                <span class="font-bold text-indigo-600 text-sm">{{ $driver->active_pickups_count }}</span>
+                                <span class="font-bold text-blue-600 text-sm">{{ $driver->active_pickups_count }}</span>
                             </div>
                             <div class="bg-white p-2 rounded-xl border border-slate-100">
                                 <span class="text-slate-400 block">Delivery Active</span>
-                                <span class="font-bold text-violet-600 text-sm">{{ $driver->active_deliveries_count }}</span>
+                                <span class="font-bold text-sky-600 text-sm">{{ $driver->active_deliveries_count }}</span>
                             </div>
                         </div>
                     </div>
