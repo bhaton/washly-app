@@ -21,11 +21,13 @@ class Login extends Component
     {
         $this->validate();
 
-        $credentials = filter_var($this->email, FILTER_VALIDATE_EMAIL)
-            ? ['email' => $this->email, 'password' => $this->password]
-            : ['phone' => $this->email, 'password' => $this->password];
+        $loginInput = trim($this->email);
 
-        if (Auth::attempt($credentials, $this->remember)) {
+        $user = User::where('email', $loginInput)
+            ->orWhere('phone', $loginInput)
+            ->first();
+
+        if ($user && Auth::attempt(['id' => $user->id, 'password' => $this->password], $this->remember)) {
             session()->regenerate();
 
             $user = Auth::user();
