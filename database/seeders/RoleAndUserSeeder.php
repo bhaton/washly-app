@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
 class RoleAndUserSeeder extends Seeder
@@ -28,8 +30,7 @@ class RoleAndUserSeeder extends Seeder
                 'is_active' => true,
             ]
         );
-        $admin->password = 'password';
-        $admin->save();
+        DB::table('users')->where('id', $admin->id)->update(['password' => Hash::make('password')]);
         $admin->assignRole($adminRole);
 
         // Create Main Driver user
@@ -42,8 +43,7 @@ class RoleAndUserSeeder extends Seeder
                 'is_active' => true,
             ]
         );
-        $driver->password = 'password';
-        $driver->save();
+        DB::table('users')->where('id', $driver->id)->update(['password' => Hash::make('password')]);
         $driver->assignRole($driverRole);
 
         // Create Second Driver user (for testing separate pickup/delivery driver)
@@ -56,8 +56,7 @@ class RoleAndUserSeeder extends Seeder
                 'is_active' => true,
             ]
         );
-        $driver2->password = 'password';
-        $driver2->save();
+        DB::table('users')->where('id', $driver2->id)->update(['password' => Hash::make('password')]);
         $driver2->assignRole($driverRole);
 
         // Create Main Customer user
@@ -70,8 +69,7 @@ class RoleAndUserSeeder extends Seeder
                 'is_active' => true,
             ]
         );
-        $customer->password = 'password';
-        $customer->save();
+        DB::table('users')->where('id', $customer->id)->update(['password' => Hash::make('password')]);
         $customer->assignRole($customerRole);
 
         // Assign 'customer' role to any registered user who currently has no role
