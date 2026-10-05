@@ -67,9 +67,25 @@ Route::get('/dev/switch/{role}', function ($role) {
         abort(404);
     }
 
-    $user = \App\Models\User::role($role)->first();
+    $email = "{$role}@laundry.test";
+    $roleObj = \Spatie\Permission\Models\Role::firstOrCreate(['name' => $role]);
+
+    $user = \App\Models\User::where('email', $email)->first();
+
     if (!$user) {
-        return redirect()->back()->with('error', "User dengan role {$role} tidak ditemukan.");
+        $user = \App\Models\User::create([
+            'name' => ucfirst($role) . ' Outlet Washly',
+            'email' => $email,
+            'password' => 'password',
+            'phone' => '081234567890',
+            'address' => 'Jl. Washly Outlet No. 1, Jakarta Central',
+            'is_active' => true,
+        ]);
+        $user->assignRole($roleObj);
+    } else {
+        if (!$user->hasRole($role)) {
+            $user->assignRole($roleObj);
+        }
     }
 
     Auth::login($user);
