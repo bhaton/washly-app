@@ -27,15 +27,20 @@ class Dashboard extends Component
             ->take(10)
             ->get();
 
-        $activeDrivers = User::role('driver')
-            ->where('is_active', true)
-            ->withCount(['pickupTasks as active_pickups_count' => function ($query) {
-                $query->whereIn('status', ['ASSIGNED', 'IN_PROGRESS']);
-            }])
-            ->withCount(['deliveryTasks as active_deliveries_count' => function ($query) {
-                $query->whereIn('status', ['ASSIGNED', 'IN_PROGRESS']);
-            }])
-            ->get();
+        try {
+            \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'driver']);
+            $activeDrivers = User::role('driver')
+                ->where('is_active', true)
+                ->withCount(['pickupTasks as active_pickups_count' => function ($query) {
+                    $query->whereIn('status', ['ASSIGNED', 'IN_PROGRESS']);
+                }])
+                ->withCount(['deliveryTasks as active_deliveries_count' => function ($query) {
+                    $query->whereIn('status', ['ASSIGNED', 'IN_PROGRESS']);
+                }])
+                ->get();
+        } catch (\Throwable $e) {
+            $activeDrivers = collect();
+        }
 
         return view('livewire.admin.dashboard', compact(
             'todayOrdersCount',
