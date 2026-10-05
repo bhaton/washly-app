@@ -4,7 +4,7 @@ namespace App\Livewire\Admin\Admins;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -73,7 +73,7 @@ class Index extends Component
                 'address' => $this->address,
             ];
             if (!empty($this->password)) {
-                $payload['password'] = Hash::make($this->password);
+                $payload['password'] = $this->password;
             }
             $admin->update($payload);
             session()->flash('message', "Data akun admin {$admin->name} berhasil diperbarui.");
@@ -83,7 +83,7 @@ class Index extends Component
                 'email' => $this->email,
                 'phone' => $this->phone,
                 'address' => $this->address,
-                'password' => Hash::make($this->password),
+                'password' => $this->password,
                 'is_active' => true,
             ]);
             $admin->assignRole('admin');

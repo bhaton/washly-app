@@ -3,7 +3,7 @@
 namespace App\Livewire\Admin\Drivers;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -77,7 +77,7 @@ class Index extends Component
                 'is_active' => $this->is_active,
             ];
             if (!empty($this->password)) {
-                $payload['password'] = Hash::make($this->password);
+                $payload['password'] = $this->password;
             }
             $driver->update($payload);
             session()->flash('message', "Data driver {$driver->name} berhasil diperbarui.");
@@ -87,7 +87,7 @@ class Index extends Component
                 'email' => $this->email,
                 'phone' => $this->phone,
                 'address' => $this->address,
-                'password' => Hash::make($this->password),
+                'password' => $this->password,
                 'is_active' => $this->is_active,
             ]);
             $driver->assignRole('driver');
