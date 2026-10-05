@@ -41,15 +41,15 @@
         </p>
 
         <div class="mb-6">
-            <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-lg transition-all">
-                Login Akun Berbeda
+            <a href="{{ route('logout.get') }}" class="inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-lg transition-all">
+                Keluar & Login Akun Berbeda
             </a>
         </div>
 
         <!-- Back Link -->
         <div class="flex items-center justify-center space-x-4 text-xs font-semibold text-slate-400">
-            <a href="{{ route('home') }}" class="hover:text-white transition-colors flex items-center gap-1">
-                ← Kembali ke Beranda
+            <a href="{{ route('logout.get') }}" class="hover:text-white transition-colors flex items-center gap-1">
+                ← Kembali ke Halaman Login
             </a>
         </div>
     </div>

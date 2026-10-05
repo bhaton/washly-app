@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     if (Auth::check()) {
         $user = Auth::user();
+        if (!$user->roles()->exists()) {
+            $customerRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'customer']);
+            $user->assignRole($customerRole);
+            $user->load('roles');
+        }
+
         if ($user->hasRole('admin')) {
             return redirect()->route('admin.dashboard');
         } elseif ($user->hasRole('driver')) {
@@ -22,6 +28,13 @@ Route::get('/', function () {
     $services = Service::where('is_active', true)->get();
     return view('welcome', compact('services'));
 })->name('home');
+
+Route::get('/logout', function () {
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect()->route('login');
+})->name('logout.get');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', Login::class)->name('login');
