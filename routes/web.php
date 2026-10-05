@@ -36,11 +36,31 @@ Route::get('/logout', function () {
     return redirect()->route('login');
 })->name('logout.get');
 
+Route::get('/login', Login::class)->name('login');
+
+// Special role login URLs automatically logout previous session to allow easy role switching
+Route::get('/admin/login', function () {
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect()->route('login');
+})->name('admin.login');
+
+Route::get('/driver/login', function () {
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect()->route('login');
+})->name('driver.login');
+
+Route::get('/customer/login', function () {
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect()->route('login');
+})->name('customer.login');
+
 Route::middleware('guest')->group(function () {
-    Route::get('/login', Login::class)->name('login');
-    Route::get('/admin/login', Login::class)->name('admin.login');
-    Route::get('/driver/login', Login::class)->name('driver.login');
-    Route::get('/customer/login', Login::class)->name('customer.login');
     Route::get('/register', Register::class)->name('register');
 });
 
