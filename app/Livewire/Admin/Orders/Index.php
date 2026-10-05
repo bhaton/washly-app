@@ -16,6 +16,7 @@ class Index extends Component
 
     public string $search = '';
     public string $statusFilter = '';
+    public string $dateFilter = '';
 
     // Assign Modal state
     public bool $showAssignModal = false;
@@ -23,7 +24,12 @@ class Index extends Component
     public string $assignType = 'pickup'; // 'pickup' or 'delivery'
     public ?int $selectedDriverId = null;
 
-    protected $queryString = ['search', 'statusFilter'];
+    // Delete Modal state
+    public bool $showDeleteModal = false;
+    public ?int $orderIdToDelete = null;
+    public ?string $orderNumberToDelete = '';
+
+    protected $queryString = ['search', 'statusFilter', 'dateFilter'];
 
     public function updatingSearch()
     {
@@ -31,6 +37,11 @@ class Index extends Component
     }
 
     public function updatingStatusFilter()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingDateFilter()
     {
         $this->resetPage();
     }
@@ -86,9 +97,51 @@ class Index extends Component
         session()->flash('message', "Status order {$order->order_number} berhasil diubah ke {$targetStatus}.");
     }
 
+    public function confirmDelete(int $orderId)
+    {
+        $order = Order::find($orderId);
+        if ($order) {
+            $this->orderIdToDelete = $order->id;
+            $this->orderNumberToDelete = $order->order_number;
+            $this->showDeleteModal = true;
+        }
+    }
+
+    public function deleteOrder()
+    {
+        if (!$this->orderIdToDelete) {
+            return;
+        }
+
+        try {
+            $orderId = $this->orderIdToDelete;
+            \Illuminate\Support\Facades\DB::transaction(function () use ($orderId) {
+                $order = Order::find($orderId);
+                if ($order) {
+                    $orderNum = $order->order_number;
+                    $order->orderItems()->delete();
+                    $order->statusHistories()->delete();
+                    $order->pickupProof()->delete();
+                    $order->deliveryProof()->delete();
+                    $order->payment()->delete();
+                    $order->pickup()->delete();
+                    $order->delivery()->delete();
+                    $order->delete();
+                    session()->flash('message', "Order {$orderNum} berhasil dihapus.");
+                }
+            });
+        } catch (\Throwable $e) {
+            session()->flash('error', "Gagal menghapus order: {$e->getMessage()}");
+        } finally {
+            $this->showDeleteModal = false;
+            $this->orderIdToDelete = null;
+            $this->orderNumberToDelete = '';
+        }
+    }
+
     public function render()
     {
-        $query = Order::with(['customer', 'pickupDriver', 'deliveryDriver', 'orderItems']);
+        $query = Order::with(['customer', 'pickupDriver', 'deliveryDriver', 'orderItems', 'payment']);
 
         if (!empty($this->search)) {
             $query->where(function ($q) {
@@ -104,6 +157,16 @@ class Index extends Component
             $query->where('status', $this->statusFilter);
         }
 
+        if (!empty($this->dateFilter)) {
+            if ($this->dateFilter === 'today') {
+                $query->whereDate('created_at', now()->today());
+            } elseif ($this->dateFilter === 'this_week') {
+                $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+            } elseif ($this->dateFilter === 'this_month') {
+                $query->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year);
+            }
+        }
+
         $orders = $query->latest()->paginate(10);
         $drivers = User::role('driver')->where('is_active', true)->get();
 
@@ -111,3 +174,4 @@ class Index extends Component
             ->layout('components.layouts.app');
     }
 }
+

@@ -25,6 +25,9 @@ Route::get('/', function () {
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', Login::class)->name('login');
+    Route::get('/admin/login', Login::class)->name('admin.login');
+    Route::get('/driver/login', Login::class)->name('driver.login');
+    Route::get('/customer/login', Login::class)->name('customer.login');
     Route::get('/register', Register::class)->name('register');
 });
 
@@ -37,4 +40,34 @@ Route::middleware('auth')->group(function () {
     })->name('logout');
 
     Route::get('/profile', ProfileIndex::class)->name('profile');
+    Route::get('/admin/promotions', \App\Livewire\Admin\Promotions\Index::class)->name('admin.promotions.index')->middleware('role:admin');
+    Route::get('/admin/reports/pdf', [\App\Http\Controllers\Admin\ReportPdfController::class, 'exportPdf'])->name('admin.reports.pdf')->middleware('role:admin');
 });
+
+// Midtrans Webhook / Notification Callback Route
+Route::post('/api/midtrans/notification', [\App\Http\Controllers\MidtransWebhookController::class, 'handle'])->name('midtrans.notification');
+Route::post('/midtrans/notification', [\App\Http\Controllers\MidtransWebhookController::class, 'handle']);
+
+// Quick Dev Role Switcher Route for Easy Multi-Role Testing
+Route::get('/dev/switch/{role}', function ($role) {
+    if (!in_array($role, ['admin', 'driver', 'customer'])) {
+        abort(404);
+    }
+
+    $user = \App\Models\User::role($role)->first();
+    if (!$user) {
+        return redirect()->back()->with('error', "User dengan role {$role} tidak ditemukan.");
+    }
+
+    Auth::login($user);
+    session()->regenerate();
+
+    $targetRoute = match($role) {
+        'admin' => 'admin.dashboard',
+        'driver' => 'driver.dashboard',
+        'customer' => 'customer.dashboard',
+    };
+
+    return redirect()->route($targetRoute)->with('message', "Berhasil beralih ke akun " . ucfirst($role) . " ({$user->email})");
+})->name('dev.switch-role');
+

@@ -107,6 +107,18 @@ class Index extends Component
         session()->flash('message', "Status driver {$driver->name} berhasil {$statusText}.");
     }
 
+    public function deleteDriver(int $driverId)
+    {
+        try {
+            $driver = User::findOrFail($driverId);
+            $driverName = $driver->name;
+            $driver->delete();
+            session()->flash('message', "Akun driver {$driverName} berhasil dihapus.");
+        } catch (\Throwable $e) {
+            session()->flash('error', "Gagal menghapus akun driver: {$e->getMessage()}");
+        }
+    }
+
     public function render()
     {
         $drivers = User::role('driver')
@@ -125,3 +137,4 @@ class Index extends Component
             ->layout('components.layouts.app');
     }
 }
+

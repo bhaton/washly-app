@@ -17,7 +17,19 @@ class Order extends Model
         'customer_id',
         'pickup_driver_id',
         'delivery_driver_id',
+        'service_type',
+        'package_type',
+        'speed_type',
+        'wash_option',
+        'estimated_weight',
+        'actual_weight',
+        'estimated_price',
+        'custom_item_name',
+        'custom_item_qty',
+        'custom_item_notes',
+        'receipt_printed_at',
         'status',
+        'completed_at',
         'subtotal',
         'shipping_fee',
         'total',
@@ -30,15 +42,34 @@ class Order extends Model
         'delivery_name',
         'delivery_phone',
         'delivery_address',
+        'delivery_date',
+        'delivery_time',
         'delivery_notes',
     ];
+
+    public function getWashOptionLabelAttribute(): string
+    {
+        return match ($this->wash_option) {
+            'cuci_saja' => 'Cuci Saja (Tanpa Lipat/Setrika)',
+            'cuci_lipat' => 'Cuci & Lipat (Tanpa Setrika)',
+            'setrika_saja' => 'Setrika Saja',
+            default => 'Cuci & Setrika (Lengkap)',
+        };
+    }
 
     protected $casts = [
         'subtotal' => 'decimal:2',
         'shipping_fee' => 'decimal:2',
         'total' => 'decimal:2',
+        'estimated_weight' => 'decimal:2',
+        'actual_weight' => 'decimal:2',
+        'estimated_price' => 'decimal:2',
         'pickup_date' => 'date',
+        'delivery_date' => 'date',
+        'receipt_printed_at' => 'datetime',
+        'completed_at' => 'datetime',
     ];
+
 
     public function customer(): BelongsTo
     {

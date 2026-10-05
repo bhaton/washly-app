@@ -29,7 +29,7 @@ class OrderWorkflowTest extends TestCase
         $this->seed(ServiceSeeder::class);
     }
 
-    public function test_full_laundry_end_to_end_workflow()
+    public function test_new_laundry_workflow_end_to_end()
     {
         Storage::fake('public');
 
@@ -38,108 +38,104 @@ class OrderWorkflowTest extends TestCase
         $driverPickup = User::where('email', 'driver@laundry.test')->first();
         $driverDelivery = User::where('email', 'driver2@laundry.test')->first();
 
-        $serviceKemeja = Service::where('name', 'Kemeja')->first();
-        $serviceCelana = Service::where('name', 'Celana')->first();
-        $serviceJaket = Service::where('name', 'Jaket')->first();
+        $serviceKiloan = Service::where('category', 'kiloan')->where('package_type', 'ekonomis')->first();
+        $serviceKaos = Service::where('name', 'Kaos')->first();
 
         $orderService = app(OrderService::class);
-        $paymentService = app(DemoQrisPaymentService::class);
         $assignmentService = app(DriverAssignmentService::class);
         $pickupService = app(PickupService::class);
         $deliveryService = app(DeliveryService::class);
         $statusService = app(OrderStatusService::class);
 
-        // 1. Customer Create Order (Kemeja x2 = 16000, Celana x1 = 10000, Jaket x1 = 15000 => Total 41000)
+        // 1. Customer Create Order
         $itemsData = [
-            ['service_id' => $serviceKemeja->id, 'quantity' => 2],
-            ['service_id' => $serviceCelana->id, 'quantity' => 1],
-            ['service_id' => $serviceJaket->id, 'quantity' => 1],
+            ['service_id' => $serviceKaos->id, 'quantity' => 10],
         ];
 
         $pickupData = [
             'pickup_name' => $customer->name,
-            'pickup_phone' => $customer->phone,
-            'pickup_address' => $customer->address,
+            'pickup_phone' => $customer->phone ?? '081234567890',
+            'pickup_address' => $customer->address ?? 'Jl. Merdeka No. 1',
             'pickup_date' => now()->format('Y-m-d'),
             'pickup_time' => '10:00',
         ];
 
         $deliveryData = [
             'delivery_name' => $customer->name,
-            'delivery_phone' => $customer->phone,
-            'delivery_address' => $customer->address,
+            'delivery_phone' => $customer->phone ?? '081234567890',
+            'delivery_address' => $customer->address ?? 'Jl. Merdeka No. 1',
         ];
 
-        $order = $orderService->createOrder($customer, $itemsData, $pickupData, $deliveryData);
+        $extraOptions = [
+            'service_type' => 'kiloan',
+            'package_type' => 'ekonomis',
+            'speed_type' => 'reguler',
+            'estimated_weight' => 2.0,
+            'estimated_price' => 16000.00,
+        ];
 
-        $this->assertEquals('PENDING_PAYMENT', $order->status);
-        $this->assertEquals(41000.00, $order->total);
-        $this->assertEquals(0.00, $order->shipping_fee);
+        $order = $orderService->createOrder($customer, $itemsData, $pickupData, $deliveryData, $extraOptions);
 
-        // 2. Demo QRIS Payment
-        $payment = $paymentService->createPayment($order);
-        $this->assertEquals('PENDING', $payment->status);
-        $this->assertStringStartsWith('DEMO-', $payment->payment_reference);
+        $this->assertEquals('MENUNGGU_PICKUP', $order->status);
 
-        $paymentService->processSimulatedPayment($order, $customer);
-        $order->refresh();
-        $order->load('payment');
-        $this->assertEquals('PAID', $order->status);
-        $this->assertEquals('PAID', $order->payment->status);
-
-        // 3. Admin Confirmation & Pickup Driver Assignment
-        $statusService->transition($order, 'WAITING_CONFIRMATION', $admin);
-        $statusService->transition($order, 'CONFIRMED', $admin);
-        $statusService->transition($order, 'WAITING_PICKUP', $admin);
-
+        // 2. Admin assign pickup driver
         $assignmentService->assignPickupDriver($order, $driverPickup, $admin);
         $order->refresh();
-        $this->assertEquals('PICKUP_ASSIGNED', $order->status);
-        $this->assertEquals($driverPickup->id, $order->pickup_driver_id);
+        $this->assertEquals('DRIVER_DITUGASKAN', $order->status);
 
-        // 4. Driver Pickup Action & Proof Upload
-        $pickupService->startPickup($order, $driverPickup);
-        $order->refresh();
-        $this->assertEquals('DRIVER_GOING_TO_PICKUP', $order->status);
-
+        // 3. Driver pickup
         $pickupProofFile = UploadedFile::fake()->image('pickup_proof.jpg');
         $pickupProofPath = $pickupProofFile->store('pickup_proofs', 'public');
-
-        $pickupService->completePickup($order, $driverPickup, $pickupProofPath, 'Pakaian 1 tas plastik rapi');
+        $pickupService->completePickup($order, $driverPickup, $pickupProofPath, 'Diambil 1 kantong');
         $order->refresh();
-        $this->assertEquals('PICKED_UP', $order->status);
+        $this->assertEquals('LAUNDRY_DITERIMA', $order->status);
         $this->assertNotNull($order->pickupProof);
+        $this->assertEquals('Diambil 1 kantong', $order->pickupProof->notes);
 
-        // 5. Outlet Reception & Processing
-        $statusService->transition($order, 'RECEIVED_AT_OUTLET', $admin);
-        $this->assertEquals('RECEIVED_AT_OUTLET', $order->status);
+        // 4. Admin confirm outlet reception
+        $statusService->transition($order, 'PROSES_LAUNDRY', $admin);
+        $order->refresh();
+        $this->assertEquals('PROSES_LAUNDRY', $order->status);
 
-        $statusService->transition($order, 'PROCESSING', $admin);
-        $this->assertEquals('PROCESSING', $order->status);
+        // 5. Laundry done & Penimbangan & Tagihan dibuat
+        $statusService->transition($order, 'LAUNDRY_SELESAI', $admin);
+        $order->actual_weight = 2.5;
+        $order->subtotal = 20000.00;
+        $order->total = 20000.00;
+        $order->save();
+        $statusService->transition($order, 'PENIMBANGAN', $admin);
+        $statusService->transition($order, 'TAGIHAN_DIBUAT', $admin);
+        $order->refresh();
+        $this->assertEquals('TAGIHAN_DIBUAT', $order->status);
+        $this->assertEquals(20000.00, $order->total);
 
-        $statusService->transition($order, 'READY_FOR_DELIVERY', $admin);
-        $this->assertEquals('READY_FOR_DELIVERY', $order->status);
-
-        // 6. Admin Assign Delivery Driver
+        // 6. Admin assign delivery driver
         $assignmentService->assignDeliveryDriver($order, $driverDelivery, $admin);
         $order->refresh();
-        $this->assertEquals('DELIVERY_ASSIGNED', $order->status);
-        $this->assertEquals($driverDelivery->id, $order->delivery_driver_id);
+        $this->assertEquals('DRIVER_PENGIRIMAN_DITUGASKAN', $order->status);
 
-        // 7. Driver Delivery & Proof Upload -> COMPLETED
-        $deliveryService->startDelivery($order, $driverDelivery);
-        $order->refresh();
-        $this->assertEquals('DRIVER_GOING_TO_CUSTOMER', $order->status);
-
+        // 7. Driver delivery
         $deliveryProofFile = UploadedFile::fake()->image('delivery_proof.jpg');
         $deliveryProofPath = $deliveryProofFile->store('delivery_proofs', 'public');
-
-        $deliveryService->completeDelivery($order, $driverDelivery, $deliveryProofPath, 'Diserahkan langsung ke customer');
+        $deliveryService->completeDelivery($order, $driverDelivery, $deliveryProofPath, 'Diserahkan ke customer + resi');
         $order->refresh();
-
-        // 8. Final Status Verification
-        $this->assertEquals('COMPLETED', $order->status);
+        $this->assertEquals('LAUNDRY_DIKEMBALIKAN', $order->status);
         $this->assertNotNull($order->deliveryProof);
-        $this->assertGreaterThan(5, $order->statusHistories()->count());
+        $this->assertEquals('Diserahkan ke customer + resi', $order->deliveryProof->notes);
+
+        // Verify Customer tracking & order detail livewire components render the driver proofs
+        $this->actingAs($customer);
+        \Livewire\Livewire::test(\App\Livewire\Customer\OrderDetail::class, ['order' => $order])
+            ->assertSee('Diambil 1 kantong')
+            ->assertSee('Diserahkan ke customer + resi');
+
+        \Livewire\Livewire::test(\App\Livewire\Customer\Tracking::class, ['order' => $order])
+            ->assertSee('Diambil 1 kantong')
+            ->assertSee('Diserahkan ke customer + resi');
+
+        // 8. Driver payment confirmation -> ORDER_SELESAI
+        $deliveryService->confirmPaymentReceived($order, $driverDelivery);
+        $order->refresh();
+        $this->assertEquals('ORDER_SELESAI', $order->status);
     }
 }

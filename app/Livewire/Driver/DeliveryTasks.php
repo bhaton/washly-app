@@ -24,7 +24,7 @@ class DeliveryTasks extends Component
 
         try {
             $deliveryService->startDelivery($order, $driver);
-            session()->flash('message', "Status delivery order {$order->order_number} diubah ke Menuju Lokasi Customer.");
+            session()->flash('message', "Status delivery order {$order->order_number} diubah ke Laundry Dikembalikan.");
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
         }
@@ -51,8 +51,21 @@ class DeliveryTasks extends Component
 
         try {
             $deliveryService->completeDelivery($order, $driver, $path, $this->proofNotes);
-            session()->flash('message', "Delivery order {$order->order_number} berhasil diselesaikan. Pesanan dinyatakan SELESAI.");
+            session()->flash('message', "Delivery order {$order->order_number} berhasil diselesaikan. Laundry diserahkan.");
             $this->showProofModal = false;
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+        }
+    }
+
+    public function confirmPayment(int $orderId, DeliveryService $deliveryService)
+    {
+        $order = Order::findOrFail($orderId);
+        $driver = Auth::user();
+
+        try {
+            $deliveryService->confirmPaymentReceived($order, $driver);
+            session()->flash('message', "Konfirmasi pembayaran driver berhasil untuk order {$order->order_number}. Order Selesai!");
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
         }
@@ -63,8 +76,8 @@ class DeliveryTasks extends Component
         $driverId = Auth::id();
 
         $deliveryOrders = Order::where('delivery_driver_id', $driverId)
-            ->whereIn('status', ['DELIVERY_ASSIGNED', 'DRIVER_GOING_TO_CUSTOMER', 'DELIVERED', 'COMPLETED'])
-            ->with(['customer', 'orderItems'])
+            ->whereIn('status', ['DRIVER_PENGIRIMAN_DITUGASKAN', 'LAUNDRY_DIKEMBALIKAN', 'PEMBAYARAN_DRIVER', 'DELIVERY_ASSIGNED', 'DRIVER_GOING_TO_CUSTOMER'])
+            ->with(['customer', 'orderItems', 'deliveryProof'])
             ->latest()
             ->get();
 

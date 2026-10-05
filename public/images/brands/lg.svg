@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 50" fill="none">
+  <g transform="translate(4, 0)">
+    <!-- Red LG Emblem -->
+    <circle cx="25" cy="25" r="22" fill="#C40030"/>
+    <!-- Eye dot -->
+    <circle cx="16.5" cy="17.5" r="3" fill="#FFFFFF"/>
+    <!-- L shape and G ring -->
+    <path d="M 25 12.5 A 12.5 12.5 0 1 1 12.5 25 H 25 V 28 H 9.5 A 15.5 15.5 0 1 0 25 9.5 Z" fill="#FFFFFF"/>
+    <!-- LG Text -->
+    <text x="58" y="37" font-family="'Helvetica Neue', Arial, 'Liberation Sans', sans-serif" font-weight="700" font-size="34" fill="#FFFFFF" letter-spacing="1">LG</text>
+  </g>
+</svg>

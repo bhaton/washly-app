@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 50" fill="none">
+  <!-- Square Box Logo -->
+  <rect x="2" y="2" width="46" height="46" rx="2" fill="#00205B"/>
+  <!-- Inner White Circle -->
+  <circle cx="25" cy="25" r="19" fill="#FFFFFF"/>
+  <!-- Electrolux Dark Blue Symbol inside Circle -->
+  <path d="M 25 7.5 C 33.5 7.5 40 14 40 22.5 C 40 31 33.5 37.5 25 37.5 C 16.5 37.5 10 31 10 22.5 C 10 14 16.5 7.5 25 7.5 Z M 25 11 C 18.5 11 13.5 16 13.5 22.5 C 13.5 29 18.5 34 25 34 C 31.5 34 36.5 29 36.5 22.5 C 36.5 16 31.5 11 25 11 Z" fill="#00205B"/>
+  <path d="M 10 22.5 C 15 22.5 22 17 25 10 C 28 17 35 22.5 40 22.5 C 35 22.5 28 28 25 35 C 22 28 15 22.5 10 22.5 Z" fill="#00205B"/>
+  
+  <!-- Text Electrolux -->
+  <text x="56" y="36" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="bold" font-size="28" fill="#FFFFFF" letter-spacing="0">Electrolux</text>
+</svg>

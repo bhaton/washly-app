@@ -20,7 +20,8 @@ class DeliveryService
             throw new InvalidArgumentException('Anda tidak berhak mengakses tugas delivery ini.');
         }
 
-        if ($order->status !== 'DELIVERY_ASSIGNED') {
+        $allowed = ['DRIVER_PENGIRIMAN_DITUGASKAN', 'TAGIHAN_DIBUAT', 'DELIVERY_ASSIGNED'];
+        if (!in_array($order->status, $allowed)) {
             throw new InvalidArgumentException("Status order tidak valid untuk memulai delivery: {$order->status}");
         }
 
@@ -29,9 +30,11 @@ class DeliveryService
             $delivery->update(['status' => 'IN_PROGRESS']);
         }
 
+        $targetStatus = $order->status === 'DELIVERY_ASSIGNED' ? 'DRIVER_GOING_TO_CUSTOMER' : 'LAUNDRY_DIKEMBALIKAN';
+
         return $this->orderStatusService->transition(
             $order,
-            'DRIVER_GOING_TO_CUSTOMER',
+            $targetStatus,
             $driver,
             'Driver dalam perjalanan mengantar laundry ke lokasi customer'
         );
@@ -43,7 +46,8 @@ class DeliveryService
             throw new InvalidArgumentException('Anda tidak berhak mengakses tugas delivery ini.');
         }
 
-        if (!in_array($order->status, ['DRIVER_GOING_TO_CUSTOMER', 'DELIVERY_ASSIGNED'])) {
+        $allowed = ['DRIVER_PENGIRIMAN_DITUGASKAN', 'LAUNDRY_DIKEMBALIKAN', 'DRIVER_GOING_TO_CUSTOMER', 'DELIVERY_ASSIGNED'];
+        if (!in_array($order->status, $allowed)) {
             throw new InvalidArgumentException("Status order tidak valid untuk menyelesaikan delivery: {$order->status}");
         }
 
@@ -67,7 +71,15 @@ class DeliveryService
             'notes' => $notes,
         ]);
 
-        // Transition to DELIVERED, then to COMPLETED per PRD Section 30
+        if (in_array($order->status, ['DRIVER_PENGIRIMAN_DITUGASKAN', 'LAUNDRY_DIKEMBALIKAN'])) {
+            return $this->orderStatusService->transition(
+                $order,
+                'LAUNDRY_DIKEMBALIKAN',
+                $driver,
+                'Laundry telah diserahkan kepada customer beserta resi pembayaran'
+            );
+        }
+
         $order = $this->orderStatusService->transition(
             $order,
             'DELIVERED',
@@ -80,6 +92,31 @@ class DeliveryService
             'COMPLETED',
             $driver,
             'Order pesanan laundry selesai'
+        );
+    }
+
+    public function confirmPaymentReceived(Order $order, User $driver): Order
+    {
+        if ($order->delivery_driver_id !== $driver->id) {
+            throw new InvalidArgumentException('Anda tidak berhak mengonfirmasi pembayaran tugas ini.');
+        }
+
+        if ($order->status !== 'LAUNDRY_DIKEMBALIKAN') {
+            throw new InvalidArgumentException("Status order harus 'LAUNDRY_DIKEMBALIKAN' untuk konfirmasi pembayaran.");
+        }
+
+        $order = $this->orderStatusService->transition(
+            $order,
+            'PEMBAYARAN_DRIVER',
+            $driver,
+            'Driver menerima pembayaran dari customer'
+        );
+
+        return $this->orderStatusService->transition(
+            $order,
+            'ORDER_SELESAI',
+            $driver,
+            'Order pesanan laundry selesai sepenuhnya'
         );
     }
 }

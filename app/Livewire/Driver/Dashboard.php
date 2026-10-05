@@ -14,29 +14,34 @@ class Dashboard extends Component
     {
         $driverId = Auth::id();
 
+        $activePickupStatuses = ['DRIVER_DITUGASKAN', 'LAUNDRY_DIJEMPUT', 'PICKUP_ASSIGNED', 'DRIVER_GOING_TO_PICKUP'];
+        $activeDeliveryStatuses = ['DRIVER_PENGIRIMAN_DITUGASKAN', 'LAUNDRY_DIKEMBALIKAN', 'DELIVERY_ASSIGNED', 'DRIVER_GOING_TO_CUSTOMER'];
+
         $assignedPickupsCount = Order::where('pickup_driver_id', $driverId)
-            ->whereIn('status', ['PICKUP_ASSIGNED', 'DRIVER_GOING_TO_PICKUP'])
+            ->whereIn('status', $activePickupStatuses)
             ->count();
 
         $assignedDeliveriesCount = Order::where('delivery_driver_id', $driverId)
-            ->whereIn('status', ['DELIVERY_ASSIGNED', 'DRIVER_GOING_TO_CUSTOMER'])
+            ->whereIn('status', $activeDeliveryStatuses)
             ->count();
 
-        $completedPickupsCount = Pickup::where('driver_id', $driverId)
-            ->where('status', 'COMPLETED')
+        $completedPickupsCount = Order::where('pickup_driver_id', $driverId)
+            ->whereNotIn('status', array_merge($activePickupStatuses, ['MENUNGGU_PICKUP', 'CANCELLED']))
             ->count();
 
-        $completedDeliveriesCount = Delivery::where('driver_id', $driverId)
-            ->where('status', 'COMPLETED')
+        $completedDeliveriesCount = Order::where('delivery_driver_id', $driverId)
+            ->whereIn('status', ['PEMBAYARAN_DRIVER', 'ORDER_SELESAI', 'DELIVERED', 'COMPLETED'])
             ->count();
 
         $pendingPickups = Order::where('pickup_driver_id', $driverId)
-            ->whereIn('status', ['PICKUP_ASSIGNED', 'DRIVER_GOING_TO_PICKUP'])
+            ->whereIn('status', $activePickupStatuses)
+            ->with('customer')
             ->latest()
             ->get();
 
         $pendingDeliveries = Order::where('delivery_driver_id', $driverId)
-            ->whereIn('status', ['DELIVERY_ASSIGNED', 'DRIVER_GOING_TO_CUSTOMER'])
+            ->whereIn('status', $activeDeliveryStatuses)
+            ->with('customer')
             ->latest()
             ->get();
 

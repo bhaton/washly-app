@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Delivery;
 use App\Models\Order;
+use App\Models\OrderStatusHistory;
 use App\Models\Pickup;
 use App\Models\User;
 use InvalidArgumentException;
@@ -20,10 +21,6 @@ class DriverAssignmentService
             throw new InvalidArgumentException('User yang dipilih bukan driver aktif.');
         }
 
-        if (!in_array($order->status, ['CONFIRMED', 'WAITING_PICKUP', 'PICKUP_ASSIGNED'])) {
-            throw new InvalidArgumentException("Order dengan status '{$order->status}' tidak dapat ditugaskan untuk pickup.");
-        }
-
         $order->pickup_driver_id = $driver->id;
         $order->save();
 
@@ -38,13 +35,23 @@ class DriverAssignmentService
             ]
         );
 
-        if ($order->status !== 'PICKUP_ASSIGNED') {
+        $pickupStageStatuses = ['MENUNGGU_PICKUP', 'CONFIRMED', 'WAITING_PICKUP', 'PICKUP_ASSIGNED'];
+        if (in_array($order->status, $pickupStageStatuses)) {
             $this->orderStatusService->transition(
                 $order,
-                'PICKUP_ASSIGNED',
+                'DRIVER_DITUGASKAN',
                 $admin,
                 "Driver pickup ditugaskan: {$driver->name}"
             );
+        } else {
+            OrderStatusHistory::create([
+                'order_id' => $order->id,
+                'from_status' => $order->status,
+                'to_status' => $order->status,
+                'changed_by' => $admin->id,
+                'changed_by_role' => 'Admin',
+                'notes' => "Driver pickup ditugaskan/diubah: {$driver->name}",
+            ]);
         }
 
         return $order;
@@ -54,10 +61,6 @@ class DriverAssignmentService
     {
         if (!$driver->hasRole('driver') || !$driver->is_active) {
             throw new InvalidArgumentException('User yang dipilih bukan driver aktif.');
-        }
-
-        if (!in_array($order->status, ['READY_FOR_DELIVERY', 'DELIVERY_ASSIGNED'])) {
-            throw new InvalidArgumentException("Order dengan status '{$order->status}' tidak dapat ditugaskan untuk delivery.");
         }
 
         $order->delivery_driver_id = $driver->id;
@@ -72,15 +75,26 @@ class DriverAssignmentService
             ]
         );
 
-        if ($order->status !== 'DELIVERY_ASSIGNED') {
+        $deliveryStageStatuses = ['TAGIHAN_DIBUAT', 'READY_FOR_DELIVERY', 'DELIVERY_ASSIGNED'];
+        if (in_array($order->status, $deliveryStageStatuses)) {
             $this->orderStatusService->transition(
                 $order,
-                'DELIVERY_ASSIGNED',
+                'DRIVER_PENGIRIMAN_DITUGASKAN',
                 $admin,
                 "Driver delivery ditugaskan: {$driver->name}"
             );
+        } else {
+            OrderStatusHistory::create([
+                'order_id' => $order->id,
+                'from_status' => $order->status,
+                'to_status' => $order->status,
+                'changed_by' => $admin->id,
+                'changed_by_role' => 'Admin',
+                'notes' => "Driver delivery ditugaskan/diubah: {$driver->name}",
+            ]);
         }
 
         return $order;
     }
 }
+

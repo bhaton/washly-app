@@ -14,6 +14,8 @@ Route::get('/orders', Orders\Index::class)->name('orders.index');
 Route::get('/orders/{order}', Orders\Show::class)->name('orders.show');
 Route::get('/customers', Customers\Index::class)->name('customers.index');
 Route::get('/drivers', Drivers\Index::class)->name('drivers.index');
+Route::get('/admins', App\Livewire\Admin\Admins\Index::class)->name('admins.index');
 Route::get('/services', Services\Index::class)->name('services.index');
 Route::get('/payments', Payments\Index::class)->name('payments.index');
 Route::get('/reports', Reports\Index::class)->name('reports.index');
+

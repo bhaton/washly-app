@@ -20,7 +20,8 @@ class PickupService
             throw new InvalidArgumentException('Anda tidak berhak mengakses tugas pickup ini.');
         }
 
-        if ($order->status !== 'PICKUP_ASSIGNED') {
+        $allowed = ['DRIVER_DITUGASKAN', 'PICKUP_ASSIGNED'];
+        if (!in_array($order->status, $allowed)) {
             throw new InvalidArgumentException("Status order tidak valid untuk memulai pickup: {$order->status}");
         }
 
@@ -29,11 +30,13 @@ class PickupService
             $pickup->update(['status' => 'IN_PROGRESS']);
         }
 
+        $targetStatus = $order->status === 'DRIVER_DITUGASKAN' ? 'LAUNDRY_DIJEMPUT' : 'DRIVER_GOING_TO_PICKUP';
+
         return $this->orderStatusService->transition(
             $order,
-            'DRIVER_GOING_TO_PICKUP',
+            $targetStatus,
             $driver,
-            'Driver dalam perjalanan menuju lokasi customer'
+            'Driver dalam perjalanan / menjemput laundry customer'
         );
     }
 
@@ -43,7 +46,8 @@ class PickupService
             throw new InvalidArgumentException('Anda tidak berhak mengakses tugas pickup ini.');
         }
 
-        if (!in_array($order->status, ['DRIVER_GOING_TO_PICKUP', 'PICKUP_ASSIGNED'])) {
+        $allowed = ['DRIVER_DITUGASKAN', 'LAUNDRY_DIJEMPUT', 'DRIVER_GOING_TO_PICKUP', 'PICKUP_ASSIGNED'];
+        if (!in_array($order->status, $allowed)) {
             throw new InvalidArgumentException("Status order tidak valid untuk menyelesaikan pickup: {$order->status}");
         }
 
@@ -57,6 +61,16 @@ class PickupService
                 'status' => 'COMPLETED',
                 'completed_at' => now(),
             ]);
+        } else {
+            Pickup::create([
+                'order_id' => $order->id,
+                'driver_id' => $driver->id,
+                'status' => 'COMPLETED',
+                'completed_at' => now(),
+                'scheduled_date' => $order->pickup_date,
+                'scheduled_time' => $order->pickup_time,
+                'notes' => $order->pickup_notes,
+            ]);
         }
 
         PickupProof::create([
@@ -67,11 +81,13 @@ class PickupService
             'notes' => $notes,
         ]);
 
+        $targetStatus = in_array($order->status, ['DRIVER_DITUGASKAN', 'LAUNDRY_DIJEMPUT']) ? 'LAUNDRY_DITERIMA' : 'PICKED_UP';
+
         return $this->orderStatusService->transition(
             $order,
-            'PICKED_UP',
+            $targetStatus,
             $driver,
-            'Laundry telah berhasil dijemput oleh driver'
+            'Laundry telah berhasil dijemput oleh driver dan diterima di outlet'
         );
     }
 }

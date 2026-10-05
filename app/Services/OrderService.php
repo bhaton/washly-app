@@ -18,37 +18,47 @@ class OrderService
 
     /**
      * Create a new order for a customer.
-     * $items format: [ ['service_id' => 1, 'quantity' => 2], ... ]
      */
-    public function createOrder(User $customer, array $itemsData, array $pickupData, array $deliveryData): Order
-    {
-        if (empty($itemsData)) {
-            throw new InvalidArgumentException('Minimal harus memilih 1 item laundry.');
-        }
+    public function createOrder(
+        User $customer,
+        array $itemsData,
+        array $pickupData,
+        array $deliveryData,
+        array $extraOptions = []
+    ): Order {
+        $serviceType = $extraOptions['service_type'] ?? 'kiloan';
+        $packageType = $extraOptions['package_type'] ?? ($serviceType === 'kiloan' ? 'ekonomis' : null);
+        $speedType = $extraOptions['speed_type'] ?? 'reguler';
 
-        // Load services and build item calculations
         $orderItemsPayload = [];
         $pricingItemsPayload = [];
 
         foreach ($itemsData as $item) {
             $serviceId = $item['service_id'] ?? null;
             $quantity = (int) ($item['quantity'] ?? 0);
+            $customUnitPrice = isset($item['unit_price']) ? (float) $item['unit_price'] : null;
 
             if ($quantity <= 0) {
                 continue;
             }
 
-            $service = Service::findOrFail($serviceId);
-            if (!$service->is_active) {
-                throw new InvalidArgumentException("Layanan {$service->name} sedang tidak aktif.");
+            if ($serviceId) {
+                $service = Service::find($serviceId);
+                if ($service && !$service->is_active) {
+                    throw new InvalidArgumentException("Layanan {$service->name} sedang tidak aktif.");
+                }
+                $serviceName = $service ? $service->name : ($item['service_name'] ?? 'Laundry Item');
+                $unitPrice = $customUnitPrice ?? ($service ? (float) ($speedType === 'ekspres' && $service->express_price > 0 ? $service->express_price : $service->price) : 0.0);
+            } else {
+                $serviceName = $item['service_name'] ?? 'Item Laundry';
+                $unitPrice = $customUnitPrice ?? 0.0;
             }
 
-            $unitPrice = (float) $service->price; // Price snapshot!
             $subtotal = round($unitPrice * $quantity, 2);
 
             $orderItemsPayload[] = [
-                'service_id' => $service->id,
-                'service_name' => $service->name,
+                'service_id' => $serviceId,
+                'service_name' => $serviceName,
                 'unit_price' => $unitPrice,
                 'quantity' => $quantity,
                 'subtotal' => $subtotal,
@@ -60,23 +70,46 @@ class OrderService
             ];
         }
 
-        if (empty($orderItemsPayload)) {
-            throw new InvalidArgumentException('Jumlah item laundry harus lebih dari 0.');
+        $estimatedWeight = $extraOptions['estimated_weight'] ?? null;
+        $estimatedPrice = $extraOptions['estimated_price'] ?? null;
+
+        if ($serviceType === 'kiloan' && !empty($orderItemsPayload)) {
+            $breakdown = array_map(fn($it) => ['name' => $it['service_name'], 'quantity' => $it['quantity']], $orderItemsPayload);
+            if (!$estimatedWeight) {
+                $estimatedWeight = $this->pricingService->calculateTotalEstimatedWeight($breakdown);
+            }
+            if (!$estimatedPrice) {
+                $pricePerKg = $this->pricingService->getKiloanPricePerKg($packageType ?? 'ekonomis', $speedType);
+                $billWeight = max(1.0, (float) $estimatedWeight);
+                $estimatedPrice = round($billWeight * $pricePerKg, 2);
+            }
+        } elseif (empty($estimatedPrice)) {
+            $totals = $this->pricingService->calculate($pricingItemsPayload);
+            $estimatedPrice = $totals['total'];
         }
 
-        $totals = $this->pricingService->calculate($pricingItemsPayload);
+        $initialSubtotal = $estimatedPrice ?? 0.00;
+        $initialTotal = $initialSubtotal;
 
-        // Generate unique order number
         $orderNumber = 'ORD-' . date('Ymd') . '-' . strtoupper(Str::random(4));
 
         $order = Order::create([
             'order_number' => $orderNumber,
             'customer_id' => $customer->id,
-            'status' => 'PENDING_PAYMENT',
-            'subtotal' => $totals['subtotal'],
-            'shipping_fee' => $totals['shipping_fee'],
-            'total' => $totals['total'],
-            
+            'service_type' => $serviceType,
+            'package_type' => $packageType,
+            'speed_type' => $speedType,
+            'wash_option' => $extraOptions['wash_option'] ?? 'cuci_setrika',
+            'estimated_weight' => $estimatedWeight,
+            'estimated_price' => $estimatedPrice,
+            'custom_item_name' => $extraOptions['custom_item_name'] ?? null,
+            'custom_item_qty' => $extraOptions['custom_item_qty'] ?? null,
+            'custom_item_notes' => $extraOptions['custom_item_notes'] ?? null,
+            'status' => 'MENUNGGU_PICKUP',
+            'subtotal' => $initialSubtotal,
+            'shipping_fee' => 0.00,
+            'total' => $initialTotal,
+
             'pickup_name' => $pickupData['pickup_name'],
             'pickup_phone' => $pickupData['pickup_phone'],
             'pickup_address' => $pickupData['pickup_address'],
@@ -87,6 +120,8 @@ class OrderService
             'delivery_name' => $deliveryData['delivery_name'],
             'delivery_phone' => $deliveryData['delivery_phone'],
             'delivery_address' => $deliveryData['delivery_address'],
+            'delivery_date' => $deliveryData['delivery_date'] ?? null,
+            'delivery_time' => $deliveryData['delivery_time'] ?? null,
             'delivery_notes' => $deliveryData['delivery_notes'] ?? null,
         ]);
 
@@ -94,8 +129,7 @@ class OrderService
             $order->orderItems()->create($itemData);
         }
 
-        // Log history
-        $this->orderStatusService->transition($order, 'PENDING_PAYMENT', $customer, 'Pesanan berhasil dibuat');
+        $this->orderStatusService->transition($order, 'MENUNGGU_PICKUP', $customer, 'Pesanan berhasil dibuat oleh customer');
 
         return $order;
     }

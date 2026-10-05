@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 65" fill="none">
+  <defs>
+    <radialGradient id="attackSunburst" cx="40%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#FFE600"/>
+      <stop offset="50%" stop-color="#FF8800"/>
+      <stop offset="100%" stop-color="#E62200"/>
+    </radialGradient>
+    <linearGradient id="blueAttack" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1D4ED8"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Tilted Oval Badge matching Image 4 -->
+  <g transform="rotate(-9 100 32)">
+    <ellipse cx="100" cy="32" rx="78" ry="26" fill="url(#attackSunburst)" stroke="#FFFFFF" stroke-width="3"/>
+    
+    <!-- Sunburst lines rays -->
+    <path d="M 100 32 L 60 10 M 100 32 L 80 8 M 100 32 L 100 6 M 100 32 L 120 8 M 100 32 L 140 12" stroke="#FFF59D" stroke-width="2.5" opacity="0.65"/>
+
+    <!-- Attack Italic Text with thick White Outline -->
+    <text x="100" y="42" text-anchor="middle" font-family="'Arial Black', 'Impact', sans-serif" font-style="italic" font-weight="900" font-size="34" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-linejoin="round">Attack</text>
+    <text x="100" y="42" text-anchor="middle" font-family="'Arial Black', 'Impact', sans-serif" font-style="italic" font-weight="900" font-size="34" fill="url(#blueAttack)">Attack</text>
+  </g>
+</svg>

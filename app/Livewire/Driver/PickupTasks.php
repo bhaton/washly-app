@@ -63,8 +63,8 @@ class PickupTasks extends Component
         $driverId = Auth::id();
 
         $pickupOrders = Order::where('pickup_driver_id', $driverId)
-            ->whereIn('status', ['PICKUP_ASSIGNED', 'DRIVER_GOING_TO_PICKUP', 'PICKED_UP'])
-            ->with(['customer', 'orderItems'])
+            ->whereIn('status', ['DRIVER_DITUGASKAN', 'LAUNDRY_DIJEMPUT', 'PICKUP_ASSIGNED', 'DRIVER_GOING_TO_PICKUP'])
+            ->with(['customer', 'orderItems', 'pickupProof'])
             ->latest()
             ->get();
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="h-full bg-slate-50">
+<html lang="id" class="h-full bg-slate-950 text-slate-100 dark">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,8 +15,12 @@
     </style>
     @livewireStyles
 </head>
-<body class="h-full font-sans antialiased text-slate-800 bg-slate-50">
+<body class="min-h-screen font-sans antialiased text-slate-100 bg-slate-950 selection:bg-blue-600 selection:text-white">
+
     {{ $slot }}
+
+
+
     @livewireScripts
 </body>
 </html>

@@ -14,24 +14,43 @@ class DemoQrisPaymentService
     ) {}
 
     /**
-     * Create or retrieve pending QRIS payment record for an order.
+     * Create or retrieve payment record for an order.
      */
-    public function createPayment(Order $order): Payment
+    public function createPayment(Order $order, string $paymentMethod = 'QRIS'): Payment
     {
         $order->unsetRelation('payment');
-        if ($order->payment) {
+        if ($order->payment && $order->payment->status === 'PAID') {
             return $order->payment;
         }
 
-        $reference = 'DEMO-' . strtoupper(Str::random(8));
+        $methodPrefix = match ($paymentMethod) {
+            'VA_BCA' => 'BCA-',
+            'VA_MANDIRI' => 'MDR-',
+            'VA_BNI' => 'BNI-',
+            'VA_BRI' => 'BRI-',
+            'GOPAY' => 'GPY-',
+            'SHOPEEPAY' => 'SPY-',
+            'CASH' => 'CSH-',
+            default => 'QRIS-',
+        };
 
-        $payment = Payment::create([
-            'order_id' => $order->id,
-            'payment_method' => 'QRIS',
-            'payment_reference' => $reference,
-            'amount' => $order->total,
-            'status' => 'PENDING',
-        ]);
+        $reference = 'PAY-' . $methodPrefix . date('Ymd') . '-' . strtoupper(Str::random(5));
+
+        if ($order->payment) {
+            $payment = $order->payment;
+            $payment->payment_method = $paymentMethod;
+            $payment->payment_reference = $reference;
+            $payment->amount = $order->total > 0 ? $order->total : ($order->estimated_price ?? 0);
+            $payment->save();
+        } else {
+            $payment = Payment::create([
+                'order_id' => $order->id,
+                'payment_method' => $paymentMethod,
+                'payment_reference' => $reference,
+                'amount' => $order->total > 0 ? $order->total : ($order->estimated_price ?? 0),
+                'status' => 'PENDING',
+            ]);
+        }
 
         $order->unsetRelation('payment');
         $order->load('payment');
@@ -40,20 +59,17 @@ class DemoQrisPaymentService
     }
 
     /**
-     * Process simulated payment approval ("Saya Sudah Membayar").
+     * Process payment approval for any gateway payment method ("Bayar via Gateway").
      */
-    public function processSimulatedPayment(Order $order, ?User $customer = null): Payment
+    public function processSimulatedPayment(Order $order, ?User $customer = null, string $paymentMethod = 'QRIS'): Payment
     {
         $order->unsetRelation('payment');
         $payment = $order->payment;
         if (!$payment) {
-            $payment = $this->createPayment($order);
+            $payment = $this->createPayment($order, $paymentMethod);
         }
 
-        if ($payment->status === 'PAID') {
-            return $payment;
-        }
-
+        $payment->payment_method = $paymentMethod;
         $payment->status = 'PAID';
         $payment->paid_at = now();
         $payment->save();
@@ -61,11 +77,12 @@ class DemoQrisPaymentService
         $order->unsetRelation('payment');
         $order->load('payment');
 
-        // Update order status PENDING_PAYMENT -> PAID
+        // Transition order status if pending payment
         if ($order->status === 'PENDING_PAYMENT') {
-            $this->orderStatusService->transition($order, 'PAID', $customer, 'Pembayaran QRIS Demo berhasil disimulasikan');
+            $this->orderStatusService->transition($order, 'PAID', $customer, 'Pembayaran via Payment Gateway (' . $paymentMethod . ') berhasil dikonfirmasi');
         }
 
         return $payment;
     }
 }
+

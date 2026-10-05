@@ -67,20 +67,24 @@ class AuthenticationTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_livewire_fill_demo_populates_fields()
+    public function test_user_can_login_via_livewire_form()
     {
         Livewire::test(Login::class)
-            ->call('fillDemo', 'admin')
-            ->assertSet('email', 'admin@laundry.test')
-            ->assertSet('password', 'password');
-    }
-
-    public function test_livewire_login_as_logs_in_user_directly()
-    {
-        Livewire::test(Login::class)
-            ->call('loginAs', 'customer')
+            ->set('email', 'customer@laundry.test')
+            ->set('password', 'password')
+            ->call('login')
             ->assertRedirect('/customer/dashboard');
 
         $this->assertAuthenticated();
+    }
+
+    public function test_dev_role_switcher_route()
+    {
+        $customer = User::where('email', 'customer@laundry.test')->first();
+        $this->actingAs($customer);
+
+        $response = $this->get('/dev/switch/admin');
+        $response->assertRedirect(route('admin.dashboard'));
+        $this->assertEquals('admin@laundry.test', auth()->user()->email);
     }
 }

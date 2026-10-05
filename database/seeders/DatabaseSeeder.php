@@ -11,7 +11,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleAndUserSeeder::class,
             ServiceSeeder::class,
-            OrderSeeder::class,
+            PromotionSeeder::class,
+            // OrderSeeder::class, // Disabled to allow clean custom order input
         ]);
     }
 }

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 55" fill="none">
+  <defs>
+    <linearGradient id="downyBlue" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0066FF"/>
+      <stop offset="100%" stop-color="#00C8FF"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(4, 5)">
+    <path d="M 8 20 C 18 10, 32 30, 42 20 C 32 35, 18 15, 8 20 Z" fill="url(#downyBlue)"/>
+    <circle cx="38" cy="12" r="3" fill="#00C8FF"/>
+    <circle cx="12" cy="28" r="2" fill="#FFFFFF"/>
+  </g>
+  <text x="46" y="37" font-family="'Trebuchet MS', 'Segoe UI', sans-serif" font-weight="bold" font-size="30" fill="#FFFFFF" letter-spacing="1">Downy</text>
+</svg>
