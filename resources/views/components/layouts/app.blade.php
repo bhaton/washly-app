@@ -249,14 +249,13 @@
             @php
                 $adminPhone = '081234567890';
                 try {
-                    if (\Spatie\Permission\Models\Role::where('name', 'admin')->exists()) {
-                        $adminUser = \App\Models\User::role('admin')->first();
-                        if ($adminUser && !empty($adminUser->phone)) {
-                            $adminPhone = $adminUser->phone;
-                        }
+                    $adminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin']);
+                    $adminUser = \App\Models\User::role('admin')->first();
+                    if ($adminUser && !empty($adminUser->phone)) {
+                        $adminPhone = $adminUser->phone;
                     }
                 } catch (\Throwable $e) {
-                    // Fallback to default admin phone if role doesn't exist yet
+                    $adminPhone = '081234567890';
                 }
                 $cleanPhone = preg_replace('/[^0-9]/', '', $adminPhone);
                 if (str_starts_with($cleanPhone, '0')) {

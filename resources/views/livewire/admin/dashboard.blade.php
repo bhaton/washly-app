@@ -108,8 +108,8 @@
                                     {{ $order->order_number }}
                                 </td>
                                 <td class="py-3.5 px-3">
-                                    <p class="font-bold text-white text-xs">{{ $order->customer->name }}</p>
-                                    <p class="text-xs text-slate-400">{{ $order->customer->phone }}</p>
+                                    <p class="font-bold text-white text-xs">{{ $order->customer?->name ?? 'Pelanggan Umum' }}</p>
+                                    <p class="text-xs text-slate-400">{{ $order->customer?->phone ?? '-' }}</p>
                                 </td>
                                 <td class="py-3.5 px-3">
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold
