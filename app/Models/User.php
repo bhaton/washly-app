@@ -7,12 +7,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Traits\HasRoles {
+    hasRole as traitHasRole;
+}
 
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable, HasRoles {
+        hasRole as traitHasRole;
+    }
 
     protected $fillable = [
         'name',
@@ -57,8 +61,14 @@ class User extends Authenticatable
         return $this->hasMany(Pickup::class, 'driver_id');
     }
 
-    public function deliveryTasks(): HasMany
+    public function hasRole($roles, string $guard = null): bool
     {
-        return $this->hasMany(Delivery::class, 'driver_id');
+        if (!$this->roles()->exists()) {
+            $customerRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'customer']);
+            $this->assignRole($customerRole);
+            $this->load('roles');
+        }
+
+        return $this->traitHasRole($roles, $guard);
     }
 }
