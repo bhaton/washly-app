@@ -19,17 +19,17 @@ class RoleAndUserSeeder extends Seeder
         $customerRole = Role::firstOrCreate(['name' => 'customer']);
 
         // Create Admin user
-        // Note: User model has 'password' => 'hashed' cast, so plain text is passed here
         $admin = User::updateOrCreate(
             ['email' => 'admin@laundry.test'],
             [
                 'name' => 'Admin Outlet Washly',
-                'password' => 'password',
                 'phone' => '081234567890',
                 'address' => 'Jl. Washly Outlet No. 1, Jakarta Central',
                 'is_active' => true,
             ]
         );
+        $admin->password = 'password';
+        $admin->save();
         $admin->assignRole($adminRole);
 
         // Create Main Driver user
@@ -37,12 +37,13 @@ class RoleAndUserSeeder extends Seeder
             ['email' => 'driver@laundry.test'],
             [
                 'name' => 'Budi Driver Pickup',
-                'password' => 'password',
                 'phone' => '081299887766',
                 'address' => 'Jl. Express No. 45, Jakarta',
                 'is_active' => true,
             ]
         );
+        $driver->password = 'password';
+        $driver->save();
         $driver->assignRole($driverRole);
 
         // Create Second Driver user (for testing separate pickup/delivery driver)
@@ -50,12 +51,13 @@ class RoleAndUserSeeder extends Seeder
             ['email' => 'driver2@laundry.test'],
             [
                 'name' => 'Siti Driver Delivery',
-                'password' => 'password',
                 'phone' => '081233445566',
                 'address' => 'Jl. Courier No. 88, Jakarta',
                 'is_active' => true,
             ]
         );
+        $driver2->password = 'password';
+        $driver2->save();
         $driver2->assignRole($driverRole);
 
         // Create Main Customer user
@@ -63,12 +65,13 @@ class RoleAndUserSeeder extends Seeder
             ['email' => 'customer@laundry.test'],
             [
                 'name' => 'Ahmad Customer',
-                'password' => 'password',
                 'phone' => '081511223344',
                 'address' => 'Jl. Mawar Mekar No. 12, Jakarta',
                 'is_active' => true,
             ]
         );
+        $customer->password = 'password';
+        $customer->save();
         $customer->assignRole($customerRole);
     }
 }
