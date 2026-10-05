@@ -37,6 +37,7 @@ class Register extends Component
             'is_active' => true,
         ]);
 
+        \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'customer']);
         $user->assignRole('customer');
 
         Auth::login($user);

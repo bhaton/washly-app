@@ -73,5 +73,10 @@ class RoleAndUserSeeder extends Seeder
         $customer->password = 'password';
         $customer->save();
         $customer->assignRole($customerRole);
+
+        // Assign 'customer' role to any registered user who currently has no role
+        User::doesntHave('roles')->get()->each(function ($user) use ($customerRole) {
+            $user->assignRole($customerRole);
+        });
     }
 }
