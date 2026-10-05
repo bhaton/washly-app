@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
 class RoleAndUserSeeder extends Seeder
@@ -20,11 +19,12 @@ class RoleAndUserSeeder extends Seeder
         $customerRole = Role::firstOrCreate(['name' => 'customer']);
 
         // Create Admin user
+        // Note: User model has 'password' => 'hashed' cast, so plain text is passed here
         $admin = User::updateOrCreate(
             ['email' => 'admin@laundry.test'],
             [
                 'name' => 'Admin Outlet Washly',
-                'password' => Hash::make('password'),
+                'password' => 'password',
                 'phone' => '081234567890',
                 'address' => 'Jl. Washly Outlet No. 1, Jakarta Central',
                 'is_active' => true,
@@ -37,7 +37,7 @@ class RoleAndUserSeeder extends Seeder
             ['email' => 'driver@laundry.test'],
             [
                 'name' => 'Budi Driver Pickup',
-                'password' => Hash::make('password'),
+                'password' => 'password',
                 'phone' => '081299887766',
                 'address' => 'Jl. Express No. 45, Jakarta',
                 'is_active' => true,
@@ -50,7 +50,7 @@ class RoleAndUserSeeder extends Seeder
             ['email' => 'driver2@laundry.test'],
             [
                 'name' => 'Siti Driver Delivery',
-                'password' => Hash::make('password'),
+                'password' => 'password',
                 'phone' => '081233445566',
                 'address' => 'Jl. Courier No. 88, Jakarta',
                 'is_active' => true,
@@ -63,7 +63,7 @@ class RoleAndUserSeeder extends Seeder
             ['email' => 'customer@laundry.test'],
             [
                 'name' => 'Ahmad Customer',
-                'password' => Hash::make('password'),
+                'password' => 'password',
                 'phone' => '081511223344',
                 'address' => 'Jl. Mawar Mekar No. 12, Jakarta',
                 'is_active' => true,
